@@ -58,11 +58,11 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="16dp"
         android:layout_marginTop="16dp"
-        android:hint="Complete and Task"
+        android:hint="Complete Task"
         app:layout_constraintEnd_toStartOf="@+id/btnAdd"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tilTime" />
+        app:layout_constraintTop_toBottomOf="@+id/btnReminder" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/tilDescription"
@@ -79,7 +79,7 @@
             android:id="@+id/tieDescription"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:lines="12"
+            android:lines="5"
             android:textSize="16sp" />
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -151,6 +151,18 @@
             android:textSize="16sp" />
     </com.google.android.material.textfield.TextInputLayout>
 
+    <ImageView
+        android:id="@+id/btnReminder"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginLeft="16dp"
+        android:src="@drawable/ic_baseline_notifications_none_24"
+        app:layout_constraintTop_toBottomOf="@id/tilTime"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/cbxStatus"
+        />
+
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnAdd"
         android:layout_width="wrap_content"
@@ -161,8 +173,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/cbxStatus"
-        app:layout_constraintVertical_bias="0.906" />
+        app:layout_constraintTop_toBottomOf="@id/cbxStatus" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
