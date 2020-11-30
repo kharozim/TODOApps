@@ -18,7 +18,7 @@ class AddFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = FragmentAddBinding.inflate(layoutInflater, container, false).apply {
+        binding = FragmentAddBinding.inflate(inflater, container, false).apply {
 
 
 

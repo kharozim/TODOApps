@@ -15,7 +15,7 @@ class HomeFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = FragmentHomeBinding.inflate(layoutInflater, container, false).apply {
+        binding = FragmentHomeBinding.inflate(inflater, container, false).apply {
 
 
 
