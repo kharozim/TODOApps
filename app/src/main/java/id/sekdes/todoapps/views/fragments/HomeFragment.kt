@@ -1,16 +1,17 @@
 package id.sekdes.todoapps.views.fragments
 
 import android.os.Bundle
-import android.view.*
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.navigation.findNavController
-import androidx.navigation.ui.NavigationUI
+import androidx.navigation.fragment.findNavController
 import com.google.android.material.tabs.TabLayoutMediator
 import id.sekdes.todoapps.R
 import id.sekdes.todoapps.databinding.FragmentHomeBinding
 import id.sekdes.todoapps.models.PageModel
 import id.sekdes.todoapps.views.adapters.PagerAdapter
-import kotlinx.android.synthetic.main.fragment_add.*
+import kotlinx.android.synthetic.main.fragment_home.*
 
 class HomeFragment : Fragment() {
 
@@ -28,24 +29,25 @@ class HomeFragment : Fragment() {
                 PageModel("Important", ImportantFragment()),
                 PageModel("Past", PastFragment())
             )
-            val adapter = PagerAdapter(pager, childFragmentManager, lifecycle)
+            adapter = PagerAdapter(pager, childFragmentManager, lifecycle)
 
             vpHome.adapter = adapter
 
             TabLayoutMediator(tlHome, vpHome) { tab, index ->
                 tab.text = pager[index].title
             }.attach()
+
+
+            topAppBar.setOnMenuItemClickListener { item ->
+                when (item.itemId) {
+                    R.id.menu_add -> {
+                        findNavController().navigate(R.id.action_homeFragment_to_addFragment)
+                        true
+                    }
+                    else -> false
+                }
+            }
         }
-
         return binding.root
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        super.onCreateOptionsMenu(menu, inflater)
-        inflater.inflate(R.menu.top_app_bar, menu)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return NavigationUI.onNavDestinationSelected(item, requireView().findNavController()) || super.onOptionsItemSelected(item)
     }
 }

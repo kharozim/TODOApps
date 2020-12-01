@@ -12,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
 
-        android:backgroundTint="@color/teal_200"
+        android:backgroundTint="@color/design_default_color_primary"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -22,7 +22,8 @@
             style="@style/Widget.MaterialComponents.Toolbar.Primary"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:backgroundTint="@color/teal_200"
+            android:backgroundTint="@color/design_default_color_primary"
+            android:paddingRight="8dp"
             app:menu="@menu/top_app_bar"
             app:title="Todo App" />
     </com.google.android.material.appbar.AppBarLayout>
