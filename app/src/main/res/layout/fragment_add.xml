@@ -3,17 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     tools:context=".views.fragments.AddFragment">
-
-    <!--    val id: Long,-->
-    <!--    val title: String,-->
-    <!--    val description: String,-->
-    <!--    val images: String,-->
-    <!--    val voiceNote: String,-->
-    <!--    val isDone: Boolean = false,-->
-    <!--    val reminder: Boolean = false,-->
-    <!--    val reminderTime: Float-->
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/tilTitle"
@@ -35,36 +26,6 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/tilRecord"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_margin="16dp"
-        android:hint="Record..."
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/btnRec"
-        app:layout_constraintTop_toBottomOf="@+id/tilImage">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/tieRecord"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="16sp" />
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <com.google.android.material.checkbox.MaterialCheckBox
-        android:id="@+id/cbxStatus"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="16dp"
-        android:layout_marginTop="16dp"
-        android:hint="Complete Task"
-        app:layout_constraintEnd_toStartOf="@+id/btnAdd"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnReminder" />
-
-    <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/tilDescription"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="0dp"
@@ -84,12 +45,11 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <ImageView
-        android:id="@+id/btnAddImage"
+        android:id="@+id/ivImage"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_marginLeft="16dp"
-        android:layout_marginTop="24dp"
-        android:layout_marginBottom="16dp"
+        android:layout_marginTop="16dp"
         android:src="@drawable/ic_baseline_image_24"
         app:layout_constraintEnd_toStartOf="@id/tilImage"
         app:layout_constraintStart_toStartOf="parent"
@@ -103,7 +63,7 @@
         android:layout_margin="16dp"
         android:hint="Image..."
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/btnAddImage"
+        app:layout_constraintStart_toEndOf="@id/ivImage"
         app:layout_constraintTop_toBottomOf="@+id/tilDescription">
 
         <com.google.android.material.textfield.TextInputEditText
@@ -114,22 +74,42 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <ImageView
-        android:id="@+id/btnRec"
+        android:id="@+id/ivRecord"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="16dp"
         android:src="@drawable/ic_baseline_keyboard_voice_24"
-        app:layout_constraintEnd_toStartOf="@id/tilImage"
+        app:layout_constraintEnd_toStartOf="@id/tilRecord"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tilImage" />
 
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/tilRecord"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:hint="Image..."
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/ivRecord"
+        app:layout_constraintTop_toBottomOf="@+id/tilImage">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/tieRecord"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="16sp" />
+    </com.google.android.material.textfield.TextInputLayout>
+
     <ImageView
-        android:id="@+id/btnTime"
+        android:id="@+id/ivTime"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="16dp"
         android:src="@drawable/ic_baseline_watch_later_24"
-        app:layout_constraintEnd_toStartOf="@id/tilImage"
+        app:layout_constraintEnd_toStartOf="@id/tilTime"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tilRecord" />
 
@@ -139,9 +119,9 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
-        android:hint="Time..."
+        android:hint="Image..."
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/btnTime"
+        app:layout_constraintStart_toEndOf="@id/ivTime"
         app:layout_constraintTop_toBottomOf="@+id/tilRecord">
 
         <com.google.android.material.textfield.TextInputEditText
@@ -152,28 +132,34 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <ImageView
-        android:id="@+id/btnReminder"
+        android:id="@+id/ivReminder"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:layout_marginTop="16dp"
         android:layout_marginLeft="16dp"
+        android:layout_marginTop="16dp"
         android:src="@drawable/ic_baseline_notifications_none_24"
-        app:layout_constraintTop_toBottomOf="@id/tilTime"
+        app:layout_constraintStart_toEndOf="@id/tilTime"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/cbxStatus"
-        />
+        app:layout_constraintTop_toBottomOf="@id/tilTime" />
 
-    <com.google.android.material.button.MaterialButton
+    <com.google.android.material.checkbox.MaterialCheckBox
+        android:id="@+id/cbxStatus"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="20dp"
+        android:hint="Complete Task"
+        app:layout_constraintTop_toBottomOf="@id/ivReminder"
+        app:layout_constraintStart_toEndOf="@id/ivReminder"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
         android:id="@+id/btnAdd"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="16dp"
-        android:hint="Tambah"
-        android:textSize="16sp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:hint="ADD"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/cbxStatus" />
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>
