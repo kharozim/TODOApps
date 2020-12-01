@@ -6,63 +6,102 @@
     android:layout_height="match_parent"
     tools:context=".views.fragments.DetailFragment">
 
-
-    <TextView
-        android:id="@+id/tv_time"
-        android:layout_width="wrap_content"
+    <Button
+        android:id="@+id/btnUpdate"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:text="16.30"
-        android:textSize="24sp"
+        android:layout_margin="16dp"
+        android:backgroundTint="@color/teal_700"
+        android:padding="16dp"
+        android:text="Update task"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.045"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        tools:layout_editor_absoluteY="526dp" />
 
-    <TextView
-        android:id="@+id/tv_tittle"
-        android:layout_width="206dp"
-        android:layout_height="32dp"
-        android:layout_marginTop="16dp"
-        android:text="Jemput Adik"
-        android:textSize="30sp"
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/tilName"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:hint="Name"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.078"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_time" />
+        app:layout_constraintTop_toTopOf="parent">
 
-    <TextView
-        android:id="@+id/tv_discription"
-        android:layout_width="339dp"
-        android:layout_height="98dp"
-        android:layout_marginTop="16dp"
-        android:text="Pergi ke bandara"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.222"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_tittle" />
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/tieName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="16sp" />
+    </com.google.android.material.textfield.TextInputLayout>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_image_dis"
-        android:layout_width="359dp"
-        android:layout_height="411dp"
-        android:layout_margin="15dp"
-        app:spanCount="2"
-        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/tilDescription"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:hint="Description"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_discription"
-        tools:listitem="@layout/list_todo" />
+        app:layout_constraintTop_toBottomOf="@id/tilName">
 
-    <SeekBar
-        android:id="@+id/bar_vc"
-        android:layout_width="149dp"
-        android:layout_height="33dp"
-        android:layout_marginTop="23dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/tieDescription"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="16sp" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/tilDate"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:hint="dd:mm:yyyy"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.099"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/rv_image_dis"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintTop_toBottomOf="@id/tilDescription">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/tieDate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="16sp" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/tilImage"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:hint="image ...."
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tilDate">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/tieImage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="16sp" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <ImageView
+        android:id="@+id/ivVoice"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_margin="16dp"
+        android:text="Sudah selesai dilakukan"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tilImage" />
+
+    <ImageView
+        android:id="@+id/ivReminder"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_margin="16dp"
+        android:text="Sudah selesai dilakukan"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/ivVoice" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
