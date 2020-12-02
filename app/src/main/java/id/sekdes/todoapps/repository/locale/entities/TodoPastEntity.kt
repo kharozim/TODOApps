@@ -14,7 +14,7 @@ data class TodoPastEntity(
     @ColumnInfo(name = "voiceNote") val voiceNote: String,
     @ColumnInfo(name = "isDone") val isDone: Boolean = false,
     @ColumnInfo(name = "reminder") val reminder: Boolean = false,
-    @ColumnInfo(name = "reminderTime") val reminderTime: Float
+    @ColumnInfo(name = "reminderTime") val reminderTime: Double = 0.0
 )
 
 fun TodoPastEntity.toModel() =

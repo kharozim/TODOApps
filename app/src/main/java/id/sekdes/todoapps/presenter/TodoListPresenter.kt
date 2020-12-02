@@ -24,7 +24,7 @@ class TodoListPresenter(
         executor.execute{
             view.loading(true)
             // convert List<Entity> to List<Model>
-            val todoListModel = repository.getAllTodo().asSequence().map { it.toModel() }.toList()
+            val todoListModel = repository.getAllTodo()
             todoList.addAll(todoListModel)
             view.loading(false)
             if (todoList.isNullOrEmpty()){

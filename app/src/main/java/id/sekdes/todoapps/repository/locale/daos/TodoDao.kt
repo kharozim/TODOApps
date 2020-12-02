@@ -9,7 +9,7 @@ interface TodoDao {
     fun getAllTodo(): List<TodoEntity>
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    fun insertTodo(entity: TodoEntity)
+    fun insertTodo(entity: TodoEntity): Long
 
     @Update
     fun updateTodo(entity: TodoEntity)
