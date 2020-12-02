@@ -5,8 +5,8 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import id.sekdes.todoapps.models.TodoModel
 
-@Entity(tableName = "todo_list")
-data class TodoListEntity(
+@Entity(tableName = "todo_past_table")
+data class TodoPastEntity(
     @PrimaryKey(autoGenerate = true) val id: Long,
     @ColumnInfo(name = "title") val title: String,
     @ColumnInfo(name = "description") val description: String,
@@ -17,4 +17,5 @@ data class TodoListEntity(
     @ColumnInfo(name = "reminderTime") val reminderTime: Float
 )
 
-fun TodoListEntity.toModel() = TodoModel(id, title, description, images, voiceNote, isDone, reminder, reminderTime)
+fun TodoPastEntity.toModel() =
+    TodoModel(id, title, description, images, voiceNote, isDone, reminder, reminderTime)

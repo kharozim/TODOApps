@@ -22,7 +22,13 @@ class HomeFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = FragmentHomeBinding.inflate(inflater, container, false).apply {
+        binding = FragmentHomeBinding.inflate(inflater, container, false)
+        setView()
+        return binding.root
+    }
+
+    private fun setView(){
+        binding.apply {
 
             val pager = listOf(
                 PageModel("Todo", ListFragment()),
@@ -48,6 +54,5 @@ class HomeFragment : Fragment() {
                 }
             }
         }
-        return binding.root
     }
 }

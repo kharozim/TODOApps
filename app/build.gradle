@@ -23,6 +23,7 @@ android {
 
     buildFeatures {
         viewBinding true
+        dataBinding true
     }
 
     buildTypes {
@@ -51,6 +52,11 @@ dependencies {
     testImplementation 'junit:junit:4.+'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
+
+
+    // Lifecycle Android Jetpack
+    implementation "androidx.lifecycle:lifecycle-extensions:$lifecycle_version"
+
 
     // Navigation Android Jetpack
     implementation "androidx.navigation:navigation-fragment-ktx:$nav_version"

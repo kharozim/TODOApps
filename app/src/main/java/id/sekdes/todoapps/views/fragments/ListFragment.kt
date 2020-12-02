@@ -6,14 +6,80 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import id.sekdes.todoapps.R
+import id.sekdes.todoapps.contract.TodoListContract
+import id.sekdes.todoapps.databinding.FragmentListBinding
+import id.sekdes.todoapps.models.TodoModel
+import id.sekdes.todoapps.presenter.TodoListPresenter
+import id.sekdes.todoapps.repository.TodoLocalRepository
+import id.sekdes.todoapps.repository.locale.TodoLocalRepositoryImpl
+import id.sekdes.todoapps.repository.locale.daos.TodoDao
+import id.sekdes.todoapps.repository.locale.databases.LocaleDatabase
+import id.sekdes.todoapps.views.adapters.TodoTodayAdapter
 
-class ListFragment : Fragment() {
+class ListFragment :
+    Fragment(),
+    TodoListContract.View,
+    TodoTodayAdapter.TodoListener {
+
+    lateinit var binding: FragmentListBinding
+    private val adapter by lazy { TodoTodayAdapter(requireContext(), this) }
+    private val dao: TodoDao by lazy { LocaleDatabase.getDatabase(requireContext()).dao() }
+    private val repository: TodoLocalRepository by lazy { TodoLocalRepositoryImpl(dao) }
+    private val presenter: TodoListContract.Presenter by lazy { TodoListPresenter(
+        this,
+        repository
+    ) }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_list, container, false)
+
+        binding = FragmentListBinding.inflate(inflater, container, false)
+
+        setView()
+        return binding.root
+    }
+
+    private fun setView(){
+        binding.run {
+            rvList.adapter = adapter
+        }
+    }
+
+    override fun loading(state: Boolean) {
+        requireActivity().runOnUiThread {
+            binding.run {
+                pbList.visibility = if (state) View.VISIBLE else View.GONE
+                rvList.visibility = if (state) View.GONE else View.VISIBLE
+            }
+        }
+    }
+
+    override fun onSuccessGetAllTodo(list: List<TodoModel>) {
+        requireActivity().runOnUiThread {
+            adapter.setData(list.toMutableList())
+        }
+    }
+
+    override fun onEmptyTodo(state: Boolean) {
+
+        requireActivity().runOnUiThread {
+            binding.run {
+                tvEmpty.visibility = if (state) View.VISIBLE else View.GONE
+                 rvList.visibility = if (state) View.GONE else View.VISIBLE
+            }
+        }
+
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        presenter.getAllTodo()
+    }
+
+    override fun onClick(todo: TodoModel) {
+        TODO("Not yet implemented")
     }
 }
