@@ -18,13 +18,16 @@ import id.sekdes.todoapps.repository.locale.databases.LocaleDatabase
 
 class AddFragment : Fragment(), TodoAddContract.View {
 
-    private lateinit var binding : FragmentAddBinding
+    private lateinit var binding: FragmentAddBinding
     private val dao: TodoDao by lazy { LocaleDatabase.getDatabase(requireContext()).dao() }
     private val repository: TodoLocalRepository by lazy { TodoLocalRepositoryImpl(dao) }
-    private val presenter: TodoAddContract.Presenter by lazy { TodoAddPresenter(
-        this,
-        repository
-    ) }
+    private val presenter: TodoAddContract.Presenter by lazy {
+        TodoAddPresenter(
+            this,
+            repository
+        )
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -36,16 +39,18 @@ class AddFragment : Fragment(), TodoAddContract.View {
         return binding.root
     }
 
-    private fun setView(){
+    private fun setView() {
         binding.apply {
-            btnAdd.setOnClickListener {
+            btSave.setOnClickListener {
                 presenter.insertTodo(
                     TodoModel(
                         null,
-                        tieTitle.text.toString(),
+                        tieName.text.toString(),
                         tieDescription.text.toString(),
-                        tieImage.text.toString(),
-                        tieRecord.text.toString()
+                        "",
+                        "",
+                        cbIsDone.isChecked,
+                        cbIsReminder.isChecked
                     )
                 )
             }

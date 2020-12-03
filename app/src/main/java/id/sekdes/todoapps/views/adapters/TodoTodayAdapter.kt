@@ -25,6 +25,17 @@ class TodoTodayAdapter (
 
         init {
             this.binding = itemListTodoBinding
+            itemListTodoBinding.root.setOnClickListener {
+                listener.onClick(itemListTodoBinding.todo!!)
+            }
+        }
+    }
+
+    fun updateData(todoModel: TodoModel){
+        val index = todoList.indexOfFirst { it.id == todoModel.id  }
+        if (index != -1){
+            todoList[index] = todoModel
+            notifyItemChanged(index)
         }
     }
 
@@ -36,7 +47,6 @@ class TodoTodayAdapter (
     interface TodoListener{
         fun onClick(todo: TodoModel)
     }
-
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {

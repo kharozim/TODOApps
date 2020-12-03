@@ -5,6 +5,8 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.navigation.fragment.findNavController
 import id.sekdes.todoapps.R
 import id.sekdes.todoapps.contract.TodoListContract
 import id.sekdes.todoapps.databinding.FragmentListBinding
@@ -25,10 +27,12 @@ class ListFragment :
     private val adapter by lazy { TodoTodayAdapter(requireContext(), this) }
     private val dao: TodoDao by lazy { LocaleDatabase.getDatabase(requireContext()).dao() }
     private val repository: TodoLocalRepository by lazy { TodoLocalRepositoryImpl(dao) }
-    private val presenter: TodoListContract.Presenter by lazy { TodoListPresenter(
-        this,
-        repository
-    ) }
+    private val presenter: TodoListContract.Presenter by lazy {
+        TodoListPresenter(
+            this,
+            repository
+        )
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -41,7 +45,7 @@ class ListFragment :
         return binding.root
     }
 
-    private fun setView(){
+    private fun setView() {
         binding.run {
             rvList.adapter = adapter
         }
@@ -62,24 +66,32 @@ class ListFragment :
         }
     }
 
+    override fun onSuccessUpdateTodo(todoModel: TodoModel) {
+        requireActivity().runOnUiThread {
+            adapter.updateData(todoModel)
+            Toast.makeText(requireContext(), "${todoModel.id} berhasil diubah", Toast.LENGTH_SHORT).show()
+        }
+    }
+
     override fun onEmptyTodo(state: Boolean) {
 
         requireActivity().runOnUiThread {
             binding.run {
                 tvEmpty.visibility = if (state) View.VISIBLE else View.GONE
-                 rvList.visibility = if (state) View.GONE else View.VISIBLE
+                rvList.visibility = if (state) View.GONE else View.VISIBLE
             }
         }
-
     }
 
     override fun onResume() {
         super.onResume()
-
         presenter.getAllTodo()
     }
 
     override fun onClick(todo: TodoModel) {
-        TODO("Not yet implemented")
+        requireActivity().runOnUiThread {
+            val action = HomeFragmentDirections.actionHomeFragmentToDetailFragment2(todo)
+            findNavController().navigate(action)
+        }
     }
 }

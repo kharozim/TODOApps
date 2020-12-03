@@ -11,24 +11,36 @@
         android:label="fragment_home"
         tools:layout="@layout/fragment_home" >
         <action
-            android:id="@+id/action_homeFragment_to_detailFragment"
-            app:destination="@id/detailFragment" />
-        <action
             android:id="@+id/action_homeFragment_to_addFragment"
-            app:destination="@id/addFragment" />
-    </fragment>
-    <fragment
-        android:id="@+id/detailFragment"
-        android:name="id.sekdes.todoapps.views.fragments.DetailFragment"
-        android:label="fragment_detail"
-        tools:layout="@layout/fragment_detail" >
+            app:destination="@id/addFragment"
+            app:popUpTo="@id/homeFragment" />
         <action
-            android:id="@+id/action_detailFragment_to_addFragment"
-            app:destination="@id/addFragment" />
+            android:id="@+id/action_homeFragment_to_detailFragment2"
+            app:destination="@id/detailFragment" />
     </fragment>
     <fragment
         android:id="@+id/addFragment"
         android:name="id.sekdes.todoapps.views.fragments.AddFragment"
         android:label="fragment_add"
         tools:layout="@layout/fragment_add" />
+    <fragment
+        android:id="@+id/detailFragment"
+        android:name="id.sekdes.todoapps.views.fragments.DetailFragment"
+        android:label="fragment_detail"
+        tools:layout="@layout/fragment_detail" >
+        <argument
+            android:name="todo"
+            app:argType="id.sekdes.todoapps.models.TodoModel" />
+    </fragment>
+    <fragment
+        android:id="@+id/listFragment2"
+        android:name="id.sekdes.todoapps.views.fragments.ListFragment"
+        android:label="fragment_list"
+        tools:layout="@layout/fragment_list" >
+        <action
+            android:id="@+id/action_listFragment2_to_detailFragment"
+            app:destination="@id/detailFragment"
+            app:popUpTo="@id/homeFragment"
+            app:popUpToInclusive="false" />
+    </fragment>
 </navigation>

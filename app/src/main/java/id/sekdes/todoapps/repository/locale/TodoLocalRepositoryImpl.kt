@@ -4,7 +4,6 @@ import id.sekdes.todoapps.models.TodoModel
 import id.sekdes.todoapps.models.toEntity
 import id.sekdes.todoapps.repository.TodoLocalRepository
 import id.sekdes.todoapps.repository.locale.daos.TodoDao
-import id.sekdes.todoapps.repository.locale.entities.TodoEntity
 import id.sekdes.todoapps.repository.locale.entities.toModel
 
 class TodoLocalRepositoryImpl(private val dao: TodoDao) : TodoLocalRepository {
@@ -17,6 +16,7 @@ class TodoLocalRepositoryImpl(private val dao: TodoDao) : TodoLocalRepository {
     }
 
     override fun updateTodo(todo: TodoModel): TodoModel {
+        println("updateingggggg")
         dao.updateTodo(todo.toEntity())
         return todo
     }

@@ -11,7 +11,7 @@ interface TodoDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     fun insertTodo(entity: TodoEntity): Long
 
-    @Update
+    @Update(onConflict = OnConflictStrategy.REPLACE)
     fun updateTodo(entity: TodoEntity)
 
     @Delete
