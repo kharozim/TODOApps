@@ -1,6 +1,6 @@
 package id.sekdes.todoapps.presenter
 
-import id.sekdes.todoapps.contract.TodoAddContract
+import id.sekdes.todoapps.views.contracts.TodoAddContract
 import id.sekdes.todoapps.models.TodoModel
 import id.sekdes.todoapps.repository.TodoLocalRepository
 import java.util.concurrent.Executors

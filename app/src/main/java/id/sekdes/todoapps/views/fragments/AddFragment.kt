@@ -6,7 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import id.sekdes.todoapps.contract.TodoAddContract
+import id.sekdes.todoapps.views.contracts.TodoAddContract
 import id.sekdes.todoapps.databinding.FragmentAddBinding
 import id.sekdes.todoapps.models.TodoModel
 import id.sekdes.todoapps.presenter.TodoAddPresenter
@@ -44,13 +44,10 @@ class AddFragment : Fragment(), TodoAddContract.View {
             btSave.setOnClickListener {
                 presenter.insertTodo(
                     TodoModel(
-                        null,
-                        tieName.text.toString(),
-                        tieDescription.text.toString(),
-                        "",
-                        "",
-                        cbIsDone.isChecked,
-                        cbIsReminder.isChecked
+                        title = tieName.text.toString(),
+                        description = tieDescription.text.toString(),
+                        isDone = cbIsDone.isChecked,
+                        reminder = cbIsReminder.isChecked
                     )
                 )
             }

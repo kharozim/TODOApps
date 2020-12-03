@@ -7,33 +7,30 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.navigation.fragment.findNavController
-import id.sekdes.todoapps.R
-import id.sekdes.todoapps.contract.TodoListContract
+import id.sekdes.todoapps.views.contracts.TodoListContract
 import id.sekdes.todoapps.databinding.FragmentListBinding
 import id.sekdes.todoapps.models.TodoModel
+import id.sekdes.todoapps.presenter.TodoDeletePresenter
 import id.sekdes.todoapps.presenter.TodoListPresenter
 import id.sekdes.todoapps.repository.TodoLocalRepository
 import id.sekdes.todoapps.repository.locale.TodoLocalRepositoryImpl
 import id.sekdes.todoapps.repository.locale.daos.TodoDao
 import id.sekdes.todoapps.repository.locale.databases.LocaleDatabase
 import id.sekdes.todoapps.views.adapters.TodoTodayAdapter
+import id.sekdes.todoapps.views.contracts.TodoDeleteContract
 
 class ListFragment :
     Fragment(),
     TodoListContract.View,
+    TodoDeleteContract.View,
     TodoTodayAdapter.TodoListener {
 
     lateinit var binding: FragmentListBinding
     private val adapter by lazy { TodoTodayAdapter(requireContext(), this) }
     private val dao: TodoDao by lazy { LocaleDatabase.getDatabase(requireContext()).dao() }
     private val repository: TodoLocalRepository by lazy { TodoLocalRepositoryImpl(dao) }
-    private val presenter: TodoListContract.Presenter by lazy {
-        TodoListPresenter(
-            this,
-            repository
-        )
-    }
-
+    private val presenter: TodoListContract.Presenter by lazy {TodoListPresenter(this,repository)}
+    private val presenterDel : TodoDeleteContract.Presenter by lazy { TodoDeletePresenter(this,repository) }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -56,6 +53,14 @@ class ListFragment :
             binding.run {
                 pbList.visibility = if (state) View.VISIBLE else View.GONE
                 rvList.visibility = if (state) View.GONE else View.VISIBLE
+            }
+        }
+    }
+
+    override fun onSuccessDeleteTodo(id: Long) {
+        requireActivity().runOnUiThread {
+            binding.run {
+                adapter.deleteData(id)
             }
         }
     }
@@ -93,5 +98,9 @@ class ListFragment :
             val action = HomeFragmentDirections.actionHomeFragmentToDetailFragment2(todo)
             findNavController().navigate(action)
         }
+    }
+
+    override fun onDelete(todo: TodoModel) {
+        presenterDel.getDeleteTodo(todo)
     }
 }

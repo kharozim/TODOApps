@@ -6,7 +6,7 @@ import kotlinx.android.parcel.Parcelize
 
 @Parcelize
 data class TodoModel(
-    val id: Long?,
+    val id: Long = 0,
     val title: String,
     val description: String,
     val images: String ="",
@@ -17,7 +17,7 @@ data class TodoModel(
 ) : Parcelable
 
 fun TodoModel.toEntity() =
-    TodoEntity(title, description, images, voiceNote, isDone, reminder, reminderTime)
+    TodoEntity(id, title, description, images, voiceNote, isDone, reminder, reminderTime)
 
 /*
 fun TodoModel.toEntity() =

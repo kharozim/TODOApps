@@ -1,18 +1,21 @@
-package id.sekdes.todoapps.contract
+package id.sekdes.todoapps.views.contracts
 
 import id.sekdes.todoapps.models.TodoModel
 
-interface TodoEditContract {
+// rules
+interface TodoListContract {
 
     // all methods to do something on views
     interface View{
         fun loading(state: Boolean)
-        fun onSuccessEditTodo(todoModel: TodoModel)
+        fun onSuccessGetAllTodo(list: List<TodoModel>)
+        fun onSuccessUpdateTodo(todoModel: TodoModel)
         fun onEmptyTodo(state: Boolean)
     }
 
     // all methods to do something with data
     interface Presenter{
-        fun getEditTodo(todoModel: TodoModel)
+        fun getAllTodo(): List<TodoModel>
     }
+
 }

@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.navArgs
-import id.sekdes.todoapps.contract.TodoEditContract
+import id.sekdes.todoapps.views.contracts.TodoEditContract
 import id.sekdes.todoapps.databinding.FragmentDetailBinding
 import id.sekdes.todoapps.models.TodoModel
 import id.sekdes.todoapps.presenter.TodoEditPresenter

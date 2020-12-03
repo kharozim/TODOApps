@@ -7,6 +7,7 @@ import id.sekdes.todoapps.models.TodoModel
 
 @Entity(tableName = "todo_table")
 data class TodoEntity(
+    @PrimaryKey(autoGenerate = true) var id: Long = 0,
     @ColumnInfo(name = "title") val title: String,
     @ColumnInfo(name = "description") val description: String,
     @ColumnInfo(name = "images") val images: String,
@@ -14,9 +15,6 @@ data class TodoEntity(
     @ColumnInfo(name = "isDone") val isDone: Boolean = false,
     @ColumnInfo(name = "reminder") val reminder: Boolean = false,
     @ColumnInfo(name = "reminderTime") val reminderTime: Double = 0.0
-){
-    @PrimaryKey(autoGenerate = true)
-    var id: Long? = null
-}
+)
 
 fun TodoEntity.toModel() = TodoModel(id, title, description, images, voiceNote, isDone, reminder, reminderTime)

@@ -1,9 +1,8 @@
 package id.sekdes.todoapps.presenter
 
-import id.sekdes.todoapps.contract.TodoListContract
+import id.sekdes.todoapps.views.contracts.TodoListContract
 import id.sekdes.todoapps.models.TodoModel
 import id.sekdes.todoapps.repository.TodoLocalRepository
-import id.sekdes.todoapps.repository.locale.entities.toModel
 import java.util.concurrent.Executors
 
 class TodoListPresenter(

@@ -1,4 +1,4 @@
-package id.sekdes.todoapps.contract
+package id.sekdes.todoapps.views.contracts
 
 import id.sekdes.todoapps.models.TodoModel
 
