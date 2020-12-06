@@ -11,7 +11,6 @@ import id.sekdes.todoapps.R
 import id.sekdes.todoapps.databinding.FragmentHomeBinding
 import id.sekdes.todoapps.models.PageModel
 import id.sekdes.todoapps.views.adapters.PagerAdapter
-import kotlinx.android.synthetic.main.fragment_home.*
 
 class HomeFragment : Fragment() {
 
@@ -32,7 +31,7 @@ class HomeFragment : Fragment() {
 
             val pager = listOf(
                 PageModel("Todo", ListFragment()),
-                PageModel("Important", ImportantFragment()),
+                PageModel("Missed", ImportantFragment()),
                 PageModel("Past", PastFragment())
             )
             adapter = PagerAdapter(pager, childFragmentManager, lifecycle)
@@ -43,15 +42,8 @@ class HomeFragment : Fragment() {
                 tab.text = pager[index].title
             }.attach()
 
-
-            topAppBar.setOnMenuItemClickListener { item ->
-                when (item.itemId) {
-                    R.id.menu_add -> {
-                        findNavController().navigate(R.id.action_homeFragment_to_addFragment)
-                        true
-                    }
-                    else -> false
-                }
+            fabAdd.setOnClickListener {
+                findNavController().navigate(R.id.action_homeFragment_to_addFragment)
             }
         }
     }
