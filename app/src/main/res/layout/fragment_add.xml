@@ -6,10 +6,11 @@
     android:layout_height="match_parent"
     android:background="@color/cardview_shadow_start_color"
     tools:context=".views.fragments.AddFragment">
+
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="20dp"
+        android:layout_margin="16dp"
         app:cardCornerRadius="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -21,75 +22,55 @@
             android:layout_height="match_parent"
             android:padding="16dp">
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/tilName"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            <EditText
+                android:id="@+id/tieName"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_margin="16dp"
                 android:hint="Title"
+                android:maxLines="1"
+                android:textSize="16sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
+                app:layout_constraintTop_toTopOf="parent" />
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/tieName"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:maxLines="1"
-                    android:textSize="16sp" />
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/tilDescription"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            <EditText
+                android:id="@+id/tieDescription"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_margin="16dp"
                 android:hint="Description"
+                android:maxLines="3"
+                android:textSize="16sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tilName">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/tieDescription"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:maxLines="3"
-                    android:textSize="16sp" />
-            </com.google.android.material.textfield.TextInputLayout>
+                app:layout_constraintTop_toBottomOf="@id/tieName" />
 
             <ImageView
                 android:id="@+id/iv_time"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
-                android:src="@drawable/ic_time"
+                android:layout_margin="16dp"
                 android:layout_marginLeft="16dp"
+                android:src="@drawable/ic_time"
                 android:text="Sudah selesai dilakukan"
                 app:layout_constraintBottom_toTopOf="@id/tv_image_saved"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tilDescription" />
+                app:layout_constraintTop_toBottomOf="@id/tieDescription" />
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/til_time"
+            <EditText
+                android:id="@+id/tie_time"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_margin="16dp"
                 android:hint="Atur Waktu"
-                app:layout_constraintBottom_toTopOf="@id/tv_image_saved"
+                android:inputType="datetime"
+                android:maxLines="3"
+                android:textSize="16sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/iv_time"
-                app:layout_constraintTop_toBottomOf="@id/tilDescription">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/tie_time"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="datetime"
-                    android:maxLines="3"
-                    android:textSize="16sp" />
-            </com.google.android.material.textfield.TextInputLayout>
+                app:layout_constraintTop_toBottomOf="@id/tieDescription" />
 
             <TextView
                 android:id="@+id/tv_image_saved"
@@ -98,7 +79,9 @@
                 android:layout_margin="16dp"
                 android:text="Image Saved : "
                 android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
-                app:layout_constraintTop_toBottomOf="@id/til_time" />
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tie_time" />
 
             <Button
                 android:id="@+id/bt_add_image"
@@ -111,15 +94,16 @@
                 app:layout_constraintTop_toBottomOf="@id/tv_image_saved" />
 
             <androidx.recyclerview.widget.RecyclerView
-                android:layout_width="wrap_content"
+                android:id="@+id/rv_image"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_margin="16dp"
                 android:orientation="horizontal"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                tools:listitem="@layout/item_list_add_image"
-                app:layout_constraintTop_toBottomOf="@id/tv_image_saved"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/bt_add_image"
-                app:layout_constraintBottom_toTopOf="@id/tv_voice_saved"
-                />
+                app:layout_constraintTop_toBottomOf="@id/tv_image_saved"
+                tools:listitem="@layout/item_list_add_image" />
 
             <TextView
                 android:id="@+id/tv_voice_saved"
@@ -128,17 +112,20 @@
                 android:layout_margin="16dp"
                 android:text="Voice Saved : "
                 android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
-                app:layout_constraintTop_toBottomOf="@id/bt_add_image" />
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/bt_add_image"
+                app:layout_constraintTop_toBottomOf="@+id/rv_image" />
 
             <Button
                 android:id="@+id/bt_add_voice"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:layout_margin="16dp"
+                android:layout_marginBottom="36dp"
                 android:background="@drawable/ic_add"
-                app:layout_constraintBottom_toTopOf="@id/cb_isReminder"
+                app:layout_constraintBottom_toTopOf="@+id/cb_isReminder"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tv_voice_saved" />
+                app:layout_constraintTop_toBottomOf="@+id/tv_voice_saved" />
 
             <ImageView
                 android:id="@+id/iv_voice_note"
@@ -147,27 +134,30 @@
                 android:layout_margin="16dp"
                 android:src="@drawable/ic_voice"
                 android:text="Sudah selesai dilakukan"
-                app:layout_constraintBottom_toTopOf="@id/cb_isReminder"
-                app:layout_constraintStart_toEndOf="@id/bt_add_voice"
-                app:layout_constraintTop_toBottomOf="@id/tv_voice_saved" />
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toEndOf="@+id/bt_add_voice"
+                app:layout_constraintTop_toBottomOf="@+id/tv_voice_saved" />
 
             <CheckBox
                 android:id="@+id/cb_isReminder"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="16dp"
+                android:layout_margin="16dp"
                 android:text="Ingatkan Saya"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/iv_voice_note" />
+                app:layout_constraintTop_toBottomOf="@+id/iv_voice_note" />
 
             <CheckBox
                 android:id="@+id/cb_isDone"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="16dp"
+                android:layout_margin="16dp"
                 android:text="sudah dikerjakan"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/cb_isReminder" />
+                app:layout_constraintTop_toBottomOf="@+id/cb_isReminder" />
 
             <Button
                 android:id="@+id/bt_save"
@@ -179,7 +169,7 @@
                 android:text="Tambah task"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/cb_isDone" />
+                app:layout_constraintTop_toBottomOf="@+id/cb_isDone" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
