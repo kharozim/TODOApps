@@ -2,13 +2,14 @@ package id.sekdes.todoapps.models
 
 import android.os.Parcelable
 import id.sekdes.todoapps.repository.locale.entities.TodoEntity
+import id.sekdes.todoapps.views.util.ArrayListConverter
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
 data class TodoModel(
     val id: Long = 0,
     val title: String,
-    val images: String ="",
+    val images: ArrayList<String?>? = null,
     val voiceNote: String = "",
     val isDone: Boolean = false,
     val dueTime: String = "",
@@ -16,4 +17,4 @@ data class TodoModel(
     val reminderTime: Double = 0.0
 ) : Parcelable
 
-fun TodoModel.toEntity() = TodoEntity(id, title, images, voiceNote, isDone, dueTime, reminder, reminderTime)
+fun TodoModel.toEntity() = TodoEntity(id, title, ArrayListConverter.fromArrayList(images), voiceNote, isDone, dueTime, reminder, reminderTime)

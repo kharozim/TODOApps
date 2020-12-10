@@ -6,7 +6,6 @@ import android.app.Activity.RESULT_OK
 import android.app.TimePickerDialog
 import android.content.DialogInterface
 import android.content.Intent
-import android.media.MediaRecorder
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -43,6 +42,7 @@ import java.io.File
 import java.io.IOException
 import java.time.LocalTime
 import java.util.*
+import kotlin.collections.ArrayList
 
 
 class AddFragment : Fragment(), TodoAddContract.View , ImageAdapter.ImageListener{
@@ -120,7 +120,8 @@ class AddFragment : Fragment(), TodoAddContract.View , ImageAdapter.ImageListene
                 presenter.insertTodo(
                     TodoModel(
                         title = etTitle.text.toString(),
-                        dueTime = pickerTime.toString()
+                        dueTime = pickerTime.toString(),
+                        images = ArrayList(imageList.asSequence().map { it.toString() }.toList())
                     )
                 )
             }
