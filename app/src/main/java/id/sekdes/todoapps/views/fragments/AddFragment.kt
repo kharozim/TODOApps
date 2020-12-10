@@ -11,7 +11,6 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
-
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -76,7 +75,6 @@ class AddFragment : Fragment(), TodoAddContract.View {
 
         setView()
 
-
         return binding.root
     }
 
@@ -92,12 +90,9 @@ class AddFragment : Fragment(), TodoAddContract.View {
             btClose.setOnClickListener {
 
             }
-            btReminder.setOnClickListener {
-
-            }
 
             btTime.setOnClickListener {
-                openDateTimePicker()
+                openTimePicker()
 
             }
 
@@ -143,8 +138,10 @@ class AddFragment : Fragment(), TodoAddContract.View {
         }
 
         // Create an ArrayAdapter
-        val adapter = ArrayAdapter.createFromResource(requireContext(),
-            R.array.reminder_list, android.R.layout.simple_spinner_item)
+        val adapter = ArrayAdapter.createFromResource(
+            requireContext(),
+            R.array.reminder_list, android.R.layout.simple_spinner_item
+        )
         // Specify the layout to use when the list of choices appears
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         // Apply the adapter to the spinner
@@ -166,7 +163,7 @@ class AddFragment : Fragment(), TodoAddContract.View {
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    private fun openDateTimePicker() {
+    private fun openTimePicker() {
         binding.run {
             val instance = Calendar.getInstance()
             val startHour = instance.get(Calendar.HOUR_OF_DAY)
@@ -183,7 +180,7 @@ class AddFragment : Fragment(), TodoAddContract.View {
                     pickedDateTime.hour < startHour) {
                     Toast.makeText(
                         requireContext(),
-                        "You are not allowed to specify an earlier time!",
+                        "Jam Sudah Terlewat",
                         Toast.LENGTH_SHORT
                     ).show()
                     btTime.text = Constant.SELECT_DATE
