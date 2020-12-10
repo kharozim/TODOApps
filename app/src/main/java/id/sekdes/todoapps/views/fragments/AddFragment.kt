@@ -1,11 +1,8 @@
 package id.sekdes.todoapps.views.fragments
 
-import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.os.Build
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -22,7 +19,7 @@ import id.sekdes.todoapps.repository.locale.databases.LocaleDatabase
 import id.sekdes.todoapps.views.contracts.TodoAddContract
 import id.sekdes.todoapps.views.utils.Constant
 import id.sekdes.todoapps.views.utils.DateUtil
-import java.time.LocalDateTime
+import java.time.LocalTime
 import java.util.*
 
 
@@ -33,7 +30,8 @@ class AddFragment : Fragment(), TodoAddContract.View {
     private val repository: TodoLocalRepository by lazy { TodoLocalRepositoryImpl(dao) }
     private val presenter: TodoAddContract.Presenter by lazy { TodoAddPresenter(this, repository) }
 
-    private lateinit var pickedDateTime: LocalDateTime
+   // private lateinit var pickedDateTime: LocalDateTime
+    private lateinit var pickedDateTime: LocalTime
 
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -88,37 +86,39 @@ class AddFragment : Fragment(), TodoAddContract.View {
     private fun openDateTimePicker() {
         binding.run {
             val instance = Calendar.getInstance()
-            val startYear = instance.get(Calendar.YEAR)
-            val startMonth = instance.get(Calendar.MONTH)
-            val startDay = instance.get(Calendar.DAY_OF_MONTH)
+//            val startYear = instance.get(Calendar.YEAR)
+//            val startMonth = instance.get(Calendar.MONTH)
+//            val startDay = instance.get(Calendar.DAY_OF_MONTH)
             val startHour = instance.get(Calendar.HOUR_OF_DAY)
             val startMinute = instance.get(Calendar.MINUTE)
 
-            val datePickerDialog = DatePickerDialog(requireContext(), { _, year, month, day ->
-                TimePickerDialog(requireContext(), { _, hour, minute ->
+           // val datePickerDialog = DatePickerDialog(requireContext(), { _, year, month, day ->
+               val timePickerDialog = TimePickerDialog(requireContext(), { _, hour, minute ->
                 pickedDateTime =
-                    LocalDateTime.of(
-                        year,
-                        month + 1,
-                        day,
+                   // LocalDateTime.of(
+                        //year,
+                        //month + 1,
+                        //day,
+                    LocalTime.of(
                         hour,
                         minute
                     )
 
-                if (pickedDateTime.dayOfMonth == startDay && pickedDateTime.hour < startHour) {
+                if (
+                    //pickedDateTime.dayOfMonth == startDay &&
+                    pickedDateTime.hour < startHour) {
                     showMessage("You are not allowed to specify an earlier time!")
                     btTime.error = "Select valid time"
                     btTime.text = Constant.SELECT_DATE
                 } else {
-                    btTime.text = pickedDateTime.format(DateUtil.dateTimeFormat)
+                    btTime.text = pickedDateTime.format(DateUtil.timeFormat)
                 }
             }, startHour, startMinute, true).show()
-            }, startYear, startMonth, startDay)
+           // }, startYear, startMonth, startDay)
 
-            datePickerDialog.datePicker
-                .minDate = System.currentTimeMillis()
+           // datePickerDialog.datePicker.minDate = System.currentTimeMillis()
 
-            datePickerDialog.show()
+            //datePickerDialog.show()
         }
     }
 
