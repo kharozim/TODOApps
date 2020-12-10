@@ -28,9 +28,9 @@ class TodoTodayAdapter(
             itemListTodoBinding.root.setOnClickListener {
                 listener.onClick(itemListTodoBinding.todo!!)
             }
-            itemListTodoBinding.ivDel.setOnClickListener {
-                listener.onDelete(itemListTodoBinding.todo!!)
-            }
+//            itemListTodoBinding.ivDel.setOnClickListener {
+//                listener.onDelete(itemListTodoBinding.todo!!)
+//            }
         }
     }
 

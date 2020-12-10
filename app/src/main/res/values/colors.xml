@@ -10,10 +10,10 @@
 
 
     <color name="background">#F4F6FD</color>
-
-
-
     <color name="font">#1B1B1B</color>
+    <color name="font_low">#2C2C2C</color>
     <color name="blue_accent">#1F145C</color>
+    <color name="blue_medium">#ADBAEB</color>
+    <color name="form_bg">#F4F6FD</color>
 
 </resources>

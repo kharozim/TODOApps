@@ -35,7 +35,7 @@ class DetailFragment : Fragment(), TodoEditContract.View {
     ): View? {
         binding = FragmentDetailBinding.inflate(inflater, container, false).apply {
 
-            tieName.setText(args.todo.title)
+//            tieName.setText(args.todo.title)
             tieDescription.setText(args.todo.description)
             tieTime.setText(args.todo.reminderTime.toString())
             cbIsDone.isChecked = args.todo.isDone
@@ -43,18 +43,18 @@ class DetailFragment : Fragment(), TodoEditContract.View {
 
 
             btnUpdate.setOnClickListener {
-                presenter.getEditTodo(
-                    TodoModel(
-                        args.todo.id,
-                        tieName.text.toString(),
-                        tieDescription.text.toString(),
-                        "",
-                        "",
-                        cbIsDone.isChecked,
-                        cbIsReminder.isChecked,
-                        tieTime.text.toString().toDouble()
-                    )
-                )
+//                presenter.getEditTodo(
+//                    TodoModel(
+//                        args.todo.id,
+//                        tieName.text.toString(),
+//                        tieDescription.text.toString(),
+//                        "",
+//                        "",
+//                        cbIsDone.isChecked,
+//                        cbIsReminder.isChecked,
+//                        tieTime.text.toString().toDouble()
+//                    )
+//                )
             }
         }
         return binding.root
