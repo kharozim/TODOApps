@@ -117,7 +117,7 @@ class AddFragment : Fragment(), TodoAddContract.View {
 
             }
 
-            ibAddImage.setOnClickListener{
+            ibAddImage.setOnClickListener {
 
                 Dexter.withActivity(activity)
                     .withPermissions(
@@ -188,8 +188,11 @@ class AddFragment : Fragment(), TodoAddContract.View {
 
                 if (
                     pickedDateTime.hour < startHour) {
-//                    showMessage("You are not allowed to specify an earlier time!")
-                    btTime.error = "Select valid time"
+                    Toast.makeText(
+                        requireContext(),
+                        "You are not allowed to specify an earlier time!",
+                        Toast.LENGTH_SHORT
+                    ).show()
                     btTime.text = Constant.SELECT_DATE
                 } else {
                     btTime.text = pickedDateTime.format(DateUtil.timeFormat)
@@ -289,7 +292,6 @@ class AddFragment : Fragment(), TodoAddContract.View {
             image
         )
     }
-
 
 
 //    private fun setRecorder(){
