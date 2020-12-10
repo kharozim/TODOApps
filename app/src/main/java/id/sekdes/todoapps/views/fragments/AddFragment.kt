@@ -49,7 +49,7 @@ class AddFragment : Fragment(), TodoAddContract.View {
     val REQUEST_IMAGE = 100
     private var imageUri: Uri? = null
     private var fileName = ""
-    private lateinit var pickedDateTime: LocalTime
+    private lateinit var pickerTime: LocalTime
 
     private lateinit var binding: FragmentAddBinding
     private val dao: TodoDao by lazy { LocaleDatabase.getDatabase(requireContext()).dao() }
@@ -125,14 +125,12 @@ class AddFragment : Fragment(), TodoAddContract.View {
 
 
             btSave.setOnClickListener {
-//                presenter.insertTodo(
-//                    TodoModel(
-//                        title = etTitle.text.toString(),
-//                        description = etTitle.text.toString(),
-//                        isDone = cbIsDone.isChecked,
-//                        reminder = cbIsReminder.isChecked
-//                    )
-//                )
+                presenter.insertTodo(
+                    TodoModel(
+                        title = etTitle.text.toString(),
+                        dueTime = pickerTime.toString()
+                    )
+                )
             }
 
         }
@@ -170,14 +168,14 @@ class AddFragment : Fragment(), TodoAddContract.View {
             val startMinute = instance.get(Calendar.MINUTE)
 
             val timePickerDialog = TimePickerDialog(requireContext(), { _, hour, minute ->
-                pickedDateTime =
+                pickerTime =
                     LocalTime.of(
                         hour,
                         minute
                     )
 
                 if (
-                    pickedDateTime.hour < startHour) {
+                    pickerTime.hour < startHour) {
                     Toast.makeText(
                         requireContext(),
                         "Jam Sudah Terlewat",
@@ -185,7 +183,7 @@ class AddFragment : Fragment(), TodoAddContract.View {
                     ).show()
                     btTime.text = Constant.SELECT_DATE
                 } else {
-                    btTime.text = pickedDateTime.format(DateUtil.timeFormat)
+                    btTime.text = pickerTime.format(DateUtil.timeFormat)
                 }
             }, startHour, startMinute, true).show()
 
