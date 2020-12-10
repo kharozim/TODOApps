@@ -19,12 +19,11 @@
             android:id="@+id/cv_item_list"
             android:layout_width="match_parent"
             android:layout_height="125dp"
-            android:layout_margin="8dp"
-            android:layout_marginStart="32dp"
-            android:layout_marginTop="24dp"
-            android:layout_marginEnd="32dp"
-            android:layout_marginBottom="24dp"
-            android:backgroundTint="@color/background"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="24dp"
+            android:layout_marginBottom="8dp"
+            android:backgroundTint="@color/form_bg"
             android:elevation="0dp"
             app:cardCornerRadius="10dp"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -35,14 +34,15 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_margin="4dp"
-                android:background="@color/background">
+                android:layout_margin="4dp">
 
                 <CheckBox
                     android:id="@+id/cb_done"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="24dp"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_marginStart="32dp"
+                    android:background="@drawable/selector_done"
+                    android:button="@null"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -51,29 +51,26 @@
                     android:id="@+id/tv_date"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
                     android:textSize="14sp"
-                    app:layout_constraintStart_toEndOf="@id/cb_done"
-                    app:layout_constraintTop_toTopOf="parent"
+                    android:textColor="@color/font"
+                    app:layout_constraintBottom_toTopOf="@+id/tv_name_task"
+                    app:layout_constraintStart_toStartOf="@+id/tv_name_task"
                     tools:text="@tools:sample/date/hhmm" />
-
-                <TextView
-                    android:id="@+id/tv_bar"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="2/4"
-                    android:textSize="14sp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
                     android:id="@+id/tv_name_task"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="32dp"
                     android:text="Name Task"
+                    android:textColor="@color/font"
+
                     android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                    android:textSize="32sp"
+                    android:textSize="24sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toEndOf="@id/cb_done"
-                    app:layout_constraintTop_toBottomOf="@id/tv_date"
+                    app:layout_constraintTop_toTopOf="parent"
                     tools:text="@{todo.title}" />
 
 
@@ -81,27 +78,20 @@
                     android:id="@+id/iv_image"
                     android:layout_width="24dp"
                     android:layout_height="24dp"
+                    android:layout_marginTop="8dp"
                     android:src="@drawable/ic_image"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toEndOf="@id/cb_done"
+                    app:layout_constraintStart_toStartOf="@+id/tv_name_task"
                     app:layout_constraintTop_toBottomOf="@id/tv_name_task" />
 
                 <ImageView
                     android:id="@+id/iv_voice_note"
                     android:layout_width="24dp"
                     android:layout_height="24dp"
+                    android:layout_marginStart="32dp"
+                    android:layout_marginTop="8dp"
                     android:src="@drawable/ic_voice"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toEndOf="@id/iv_image"
+                    app:layout_constraintStart_toStartOf="@+id/tv_name_task"
                     app:layout_constraintTop_toBottomOf="@id/tv_name_task" />
-
-                <ImageView
-                    android:id="@+id/iv_del"
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:src="@drawable/ic_del"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.cardview.widget.CardView>
