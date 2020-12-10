@@ -100,6 +100,10 @@ class ListFragment :
         }
     }
 
+    override fun onDone(todo: TodoModel) {
+            presenter.getEditTodo(todo)
+    }
+
     override fun onDelete(todo: TodoModel) {
         presenterDel.getDeleteTodo(todo)
     }

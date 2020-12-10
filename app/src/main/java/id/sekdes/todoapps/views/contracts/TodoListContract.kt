@@ -16,6 +16,7 @@ interface TodoListContract {
     // all methods to do something with data
     interface Presenter{
         fun getAllTodo(): List<TodoModel>
+        fun getEditTodo(todoModel: TodoModel)
     }
 
 }

@@ -25,12 +25,7 @@ class TodoTodayAdapter(
 
         init {
             this.binding = itemListTodoBinding
-            itemListTodoBinding.root.setOnClickListener {
-                listener.onClick(itemListTodoBinding.todo!!)
-            }
-//            itemListTodoBinding.ivDel.setOnClickListener {
-//                listener.onDelete(itemListTodoBinding.todo!!)
-//            }
+
         }
     }
 
@@ -49,6 +44,7 @@ class TodoTodayAdapter(
 
     interface TodoListener {
         fun onClick(todo: TodoModel)
+        fun onDone(todo: TodoModel)
         fun onDelete(todo: TodoModel)
     }
 
@@ -61,7 +57,18 @@ class TodoTodayAdapter(
     }
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
-        holder.itemListTodoBinding.todo = todoList[position]
+        val model = todoList[position]
+        holder.itemListTodoBinding.todo = model
+        holder.itemListTodoBinding.apply {
+            root.setOnClickListener {
+                listener.onClick(todo!!)
+            }
+            cbDone.setOnClickListener {
+                todo!!.isDone = !todo!!.isDone
+
+                listener.onDone(todo!!)
+            }
+        }
     }
 
     override fun getItemCount(): Int {

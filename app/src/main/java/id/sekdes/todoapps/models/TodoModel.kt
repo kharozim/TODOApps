@@ -11,7 +11,7 @@ data class TodoModel(
     val title: String,
     val images: ArrayList<String?>? = null,
     val voiceNote: String = "",
-    val isDone: Boolean = false,
+    var isDone: Boolean = false,
     val dueTime: String = "",
     val reminder: Boolean = false,
     val reminderTime: Double = 0.0
