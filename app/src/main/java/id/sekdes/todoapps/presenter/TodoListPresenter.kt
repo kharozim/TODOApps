@@ -21,11 +21,11 @@ class TodoListPresenter(
         val todoList = mutableListOf<TodoModel>()
         // access room db
         executor.execute{
-            view.loading(true)
+            //view.loading(true)
             // convert List<Entity> to List<Model>
             val todoListModel = repository.getAllTodo()
             todoList.addAll(todoListModel)
-            view.loading(false)
+           // view.loading(false)
             if (todoList.isNullOrEmpty()){
                 view.onEmptyTodo(true)
             }else{
