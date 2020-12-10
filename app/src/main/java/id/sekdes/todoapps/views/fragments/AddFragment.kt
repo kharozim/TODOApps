@@ -20,6 +20,7 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
+import com.bumptech.glide.Glide
 import com.karumi.dexter.Dexter
 import com.karumi.dexter.MultiplePermissionsReport
 import com.karumi.dexter.PermissionToken
@@ -34,6 +35,7 @@ import id.sekdes.todoapps.repository.locale.TodoLocalRepositoryImpl
 import id.sekdes.todoapps.repository.locale.daos.TodoDao
 import id.sekdes.todoapps.repository.locale.databases.LocaleDatabase
 import id.sekdes.todoapps.views.ImagePickerActivity
+import id.sekdes.todoapps.views.adapters.ImageAdapter
 import id.sekdes.todoapps.views.contracts.TodoAddContract
 import id.sekdes.todoapps.views.util.Constant
 import id.sekdes.todoapps.views.util.DateUtil
@@ -43,28 +45,16 @@ import java.time.LocalTime
 import java.util.*
 
 
-class AddFragment : Fragment(), TodoAddContract.View {
+class AddFragment : Fragment(), TodoAddContract.View , ImageAdapter.ImageListener{
 
-    private val pickImage = 100
-    val REQUEST_IMAGE = 100
-    private var imageUri: Uri? = null
-    private var fileName = ""
+    private val REQUEST_IMAGE = 100
     private lateinit var pickerTime: LocalTime
-
+    private val imageAdapter by lazy { ImageAdapter(requireContext(), this) }
     private lateinit var binding: FragmentAddBinding
     private val dao: TodoDao by lazy { LocaleDatabase.getDatabase(requireContext()).dao() }
     private val repository: TodoLocalRepository by lazy { TodoLocalRepositoryImpl(dao) }
     private val presenter: TodoAddContract.Presenter by lazy { TodoAddPresenter(this, repository) }
-
-
-    private var output: String? = null
-    private var mediaRecorder: MediaRecorder? = null
-    private var state: Boolean = false
-    private var recordingStopped: Boolean = false
-
-    val REQUEST_IMAGE_CAPTURE = 0
-    val REQUEST_GALLERY_IMAGE = 1
-
+    private val imageList = mutableListOf<Uri>()
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreateView(
@@ -82,13 +72,15 @@ class AddFragment : Fragment(), TodoAddContract.View {
     private fun setView() {
         binding.apply {
 
+            rvImage.adapter = imageAdapter
+
 
             btRecord.setOnClickListener {
 
             }
 
             btClose.setOnClickListener {
-
+                activity?.onBackPressed()
             }
 
             btTime.setOnClickListener {
@@ -256,8 +248,9 @@ class AddFragment : Fragment(), TodoAddContract.View {
         if (requestCode == REQUEST_IMAGE) {
             if (resultCode == RESULT_OK) {
                 val uri = data!!.getParcelableExtra<Uri>("path")
+                imageList.add(uri!!)
                 try {
-
+                    imageAdapter.setData(imageList)
                 } catch (e: IOException) {
                     e.printStackTrace()
                 }
@@ -267,7 +260,7 @@ class AddFragment : Fragment(), TodoAddContract.View {
 
 
     private fun getCacheImagePath(fileName: String): Uri? {
-        val path: File = File(activity?.externalCacheDir, "camera")
+        val path = File(activity?.externalCacheDir, "camera")
         if (!path.exists()) path.mkdirs()
         val image = File(path, fileName)
         return FileProvider.getUriForFile(
@@ -283,6 +276,14 @@ class AddFragment : Fragment(), TodoAddContract.View {
             Toast.makeText(context, "New Task is assigned", Toast.LENGTH_LONG).show()
             requireActivity().onBackPressed()
         }
+    }
+
+    override fun onClick(uri: Uri) {
+        TODO("Not yet implemented")
+    }
+
+    override fun onDelete(uri: Uri) {
+        imageAdapter.deleteData(uri)
     }
 }
 

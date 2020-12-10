@@ -38,7 +38,7 @@ class DetailFragment : Fragment(), TodoEditContract.View {
 //            tieName.setText(args.todo.title)
 //            tieDescription.setText(args.todo.description)
             etTitle.setText(args.todo.title)
-            btTime.setText(args.todo.dueTime)
+            btTime.text = args.todo.dueTime
 
 
             btUpdate.setOnClickListener {
