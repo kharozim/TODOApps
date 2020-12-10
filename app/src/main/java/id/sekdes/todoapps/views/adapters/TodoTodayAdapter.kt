@@ -55,8 +55,7 @@ class TodoTodayAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
         val inflater = LayoutInflater.from(context)
-        val binding: ItemListTodoBinding =
-            DataBindingUtil.inflate(inflater, R.layout.item_list_todo, parent, false)
+        val binding: ItemListTodoBinding = DataBindingUtil.inflate(inflater, R.layout.item_list_todo, parent, false)
 
         return MyViewHolder(binding, listener)
     }
