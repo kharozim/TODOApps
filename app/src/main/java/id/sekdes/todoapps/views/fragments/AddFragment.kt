@@ -33,6 +33,8 @@ import id.sekdes.todoapps.repository.TodoLocalRepository
 import id.sekdes.todoapps.repository.locale.TodoLocalRepositoryImpl
 import id.sekdes.todoapps.repository.locale.daos.TodoDao
 import id.sekdes.todoapps.repository.locale.databases.LocaleDatabase
+import id.sekdes.todoapps.services.AlarmRemainderService.Companion.TIME_FORMAT
+import id.sekdes.todoapps.services.AlarmRemainderService.Companion.setAlarmReminder
 import id.sekdes.todoapps.views.ImagePickerActivity
 import id.sekdes.todoapps.views.adapters.ImageAdapter
 import id.sekdes.todoapps.views.contracts.TodoAddContract
@@ -40,6 +42,9 @@ import id.sekdes.todoapps.views.util.Constant
 import id.sekdes.todoapps.views.util.DateUtil
 import java.io.File
 import java.io.IOException
+import java.text.SimpleDateFormat
+import java.time.LocalDate
+import java.time.LocalDateTime
 import java.time.LocalTime
 import java.util.*
 import kotlin.collections.ArrayList
@@ -48,7 +53,7 @@ import kotlin.collections.ArrayList
 class AddFragment : Fragment(), TodoAddContract.View , ImageAdapter.ImageListener{
 
     private val REQUEST_IMAGE = 100
-    private lateinit var pickerTime: LocalTime
+//    private lateinit var pickerTime: LocalTime
     private val imageAdapter by lazy { ImageAdapter(requireContext(), this) }
     private lateinit var binding: FragmentAddBinding
     private val dao: TodoDao by lazy { LocaleDatabase.getDatabase(requireContext()).dao() }
@@ -56,7 +61,8 @@ class AddFragment : Fragment(), TodoAddContract.View , ImageAdapter.ImageListene
     private val presenter: TodoAddContract.Presenter by lazy { TodoAddPresenter(this, repository) }
     private val imageList = mutableListOf<Uri>()
 
-    @RequiresApi(Build.VERSION_CODES.O)
+    private val pickerTimeAlt: Calendar = Calendar.getInstance()
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -68,7 +74,6 @@ class AddFragment : Fragment(), TodoAddContract.View , ImageAdapter.ImageListene
         return binding.root
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     private fun setView() {
         binding.apply {
 
@@ -117,13 +122,20 @@ class AddFragment : Fragment(), TodoAddContract.View , ImageAdapter.ImageListene
 
 
             btSave.setOnClickListener {
-                presenter.insertTodo(
-                    TodoModel(
-                        title = etTitle.text.toString(),
-                        dueTime = pickerTime.toString(),
-                        images = ArrayList(imageList.asSequence().map { it.toString() }.toList())
-                    )
+                val todo = TodoModel(
+                    title = etTitle.text.toString(),
+                    dueTime = SimpleDateFormat(TIME_FORMAT, Locale.getDefault()).format(pickerTimeAlt.time),
+                    images = ArrayList(imageList.asSequence().map { it.toString() }.toList())
                 )
+//                presenter.insertTodo(
+//                    TodoModel(
+//                        title = etTitle.text.toString(),
+//                        dueTime = pickerTime.toString(),
+//                        images = ArrayList(imageList.asSequence().map { it.toString() }.toList())
+//                    )
+//                )
+                presenter.insertTodo(todo)
+                setAlarmReminder(requireContext(),todo)
             }
 
         }
@@ -153,7 +165,6 @@ class AddFragment : Fragment(), TodoAddContract.View , ImageAdapter.ImageListene
             })
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     private fun openTimePicker() {
         binding.run {
             val instance = Calendar.getInstance()
@@ -161,14 +172,16 @@ class AddFragment : Fragment(), TodoAddContract.View , ImageAdapter.ImageListene
             val startMinute = instance.get(Calendar.MINUTE)
 
             val timePickerDialog = TimePickerDialog(requireContext(), { _, hour, minute ->
-                pickerTime =
-                    LocalTime.of(
-                        hour,
-                        minute
-                    )
+                pickerTimeAlt.set(Calendar.HOUR_OF_DAY,hour)
+                pickerTimeAlt.set(Calendar.MINUTE,minute)
+//                pickerTime =
+//                    LocalTime.of(
+//                        hour,
+//                        minute
+//                    )
 
-                if (
-                    pickerTime.hour < startHour) {
+//                pickerTime.hour < startHour
+                if (pickerTimeAlt.get(Calendar.HOUR_OF_DAY) < startHour) {
                     Toast.makeText(
                         requireContext(),
                         "Jam Sudah Terlewat",
@@ -176,7 +189,8 @@ class AddFragment : Fragment(), TodoAddContract.View , ImageAdapter.ImageListene
                     ).show()
                     btTime.text = Constant.SELECT_DATE
                 } else {
-                    btTime.text = pickerTime.format(DateUtil.timeFormat)
+//                    btTime.text = pickerTime.format(DateUtil.timeFormat)
+                    btTime.text = SimpleDateFormat(TIME_FORMAT, Locale.getDefault()).format(pickerTimeAlt.time)
                 }
             }, startHour, startMinute, true).show()
 
