@@ -31,7 +31,7 @@ class HomeFragment : Fragment() {
 
             val pager = listOf(
                 PageModel("Todo", ListFragment()),
-                PageModel("Missed", ImportantFragment()),
+                PageModel("Missed", MissedFragment()),
                 PageModel("Past", PastFragment())
             )
             adapter = PagerAdapter(pager, childFragmentManager, lifecycle)

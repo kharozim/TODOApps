@@ -7,32 +7,34 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.RequiresApi
-import id.sekdes.todoapps.databinding.FragmentPastBinding
+import id.sekdes.todoapps.R
+import id.sekdes.todoapps.databinding.FragmentMissedBinding
 import id.sekdes.todoapps.models.TodoModel
-import id.sekdes.todoapps.presenter.TodoPastPresenter
+import id.sekdes.todoapps.presenter.TodoListPresenter
 import id.sekdes.todoapps.repository.TodoLocalRepository
 import id.sekdes.todoapps.repository.locale.TodoLocalRepositoryImpl
 import id.sekdes.todoapps.repository.locale.daos.TodoDao
 import id.sekdes.todoapps.repository.locale.databases.LocaleDatabase
-import id.sekdes.todoapps.views.adapters.TodoPastAdapter
-import id.sekdes.todoapps.views.contracts.TodoPastContract
+import id.sekdes.todoapps.views.adapters.TodoMissedAdapter
+import id.sekdes.todoapps.views.adapters.TodoTodayAdapter
+import id.sekdes.todoapps.views.contracts.TodoListContract
 
-class PastFragment : Fragment(), TodoPastContract.View , TodoPastAdapter.TodoListener{
+class MissedFragment : Fragment(), TodoMissedAdapter.TodoListener, TodoListContract.View  {
 
-    private lateinit var binding: FragmentPastBinding
-    private val adapter by lazy { TodoPastAdapter(requireContext(), this) }
+    private lateinit var binding : FragmentMissedBinding
+    private val adapter by lazy { TodoMissedAdapter(requireContext(), this) }
     private val dao: TodoDao by lazy { LocaleDatabase.getDatabase(requireContext()).dao() }
     private val repository: TodoLocalRepository by lazy { TodoLocalRepositoryImpl(dao) }
-    private val presenter: TodoPastContract.Presenter by lazy { TodoPastPresenter(this,repository) }
+    private val presenter: TodoListContract.Presenter by lazy { TodoListPresenter(this,repository) }
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = FragmentPastBinding.inflate(inflater, container, false)
+        binding = FragmentMissedBinding.inflate(inflater, container, false)
 
         setView()
-
         return binding.root
     }
 
@@ -43,21 +45,24 @@ class PastFragment : Fragment(), TodoPastContract.View , TodoPastAdapter.TodoLis
 
     private fun setView(){
         binding.run {
-            rvPastTodo.adapter = adapter
+            rvMissedTodo.adapter = adapter
         }
     }
 
     override fun onClick(todo: TodoModel) {
+
     }
 
     override fun onDelete(todo: TodoModel, position: Int) {
+
     }
 
-
     override fun onLongPress(todo: TodoModel, position: Int) {
+
     }
 
     override fun loading(state: Boolean) {
+
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -67,7 +72,17 @@ class PastFragment : Fragment(), TodoPastContract.View , TodoPastAdapter.TodoLis
         }
     }
 
+    override fun onSuccessUpdateTodo(todoModel: TodoModel) {
+
+    }
+
     override fun onEmptyTodo(state: Boolean) {
+        requireActivity().runOnUiThread {
+            binding.run {
+                tvEmptyMissed.visibility = if (state) View.VISIBLE else View.GONE
+                rvMissedTodo.visibility = if (state) View.GONE else View.VISIBLE
+            }
+        }
     }
 
 }
