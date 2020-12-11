@@ -28,7 +28,7 @@ class AlarmRemainderService: BroadcastReceiver() {
 
         const val TIME_FORMAT = "HH:mm"
 
-        fun setAlarmReminder(mContext: Context, todoData: TodoModel, isReminder: Boolean){
+        fun setAlarmReminder(mContext: Context, todoData: TodoModel){
             if (!isFormatValid(todoData.dueTime)){
                 Toast.makeText(mContext, mContext.getString(R.string.reminder_failed), Toast.LENGTH_SHORT).show()
                 return
@@ -43,7 +43,7 @@ class AlarmRemainderService: BroadcastReceiver() {
                 it.isEmpty()
             }.toTypedArray()
 
-            if (isReminder){
+            if (todoData.reminder){
                 val minuteBefore = mTimeArray[1].toInt().minus(todoData.reminderTime)
 
                 mTimeArray[1] = minuteBefore.toString()
@@ -62,7 +62,7 @@ class AlarmRemainderService: BroadcastReceiver() {
             val mPendingIntent = PendingIntent.getBroadcast(mContext, todoData.id.toInt(), mIntent,0)
             mAlarmManager.set(AlarmManager.RTC_WAKEUP, mCalendarOfDay.timeInMillis, mPendingIntent)
 
-            if (isReminder)
+            if (todoData.reminder)
                 Toast.makeText(mContext,mContext.getString(R.string.reminder_success), Toast.LENGTH_SHORT).show()
 
         }
@@ -145,7 +145,7 @@ class AlarmRemainderService: BroadcastReceiver() {
 
         if (todoData !=null && todoData.reminder){
             todoData.reminder = false
-            setAlarmReminder(mContext, todoData, false)
+            setAlarmReminder(mContext, todoData)
         }
     }
 
