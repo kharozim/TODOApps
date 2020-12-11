@@ -330,7 +330,7 @@ class AddFragment : Fragment(), TodoAddContract.View , ImageAdapter.ImageListene
     override fun onSuccessInsertTodo(todoModel: TodoModel) {
         requireActivity().runOnUiThread {
             setAlarmReminder(requireContext(),todoModel)
-            Toast.makeText(context, "New Task is assigned", Toast.LENGTH_LONG).show()
+            Toast.makeText(context, "New Task is assigned: ${todoModel.title}", Toast.LENGTH_LONG).show()
             requireActivity().onBackPressed()
         }
     }

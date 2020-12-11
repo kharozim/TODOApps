@@ -9,9 +9,11 @@ import android.content.Context
 import android.content.Intent
 import android.media.RingtoneManager
 import android.os.Build
+import android.util.Log
 import android.widget.Toast
 import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
+import com.google.gson.Gson
 import id.sekdes.todoapps.MainActivity
 import id.sekdes.todoapps.R
 import id.sekdes.todoapps.models.TodoModel
@@ -37,8 +39,7 @@ class AlarmRemainderService: BroadcastReceiver() {
             val mAlarmManager = mContext.getSystemService(Context.ALARM_SERVICE) as AlarmManager
             val mIntent = Intent(mContext, AlarmRemainderService::class.java)
                 .putExtra(
-                    DATA_TODO,todoData)
-
+                    DATA_TODO, Gson().toJson(todoData))
             val mTimeArray = todoData.dueTime.split(":".toRegex()).dropLastWhile {
                 it.isEmpty()
             }.toTypedArray()
@@ -106,7 +107,8 @@ class AlarmRemainderService: BroadcastReceiver() {
     }
 
     private fun showAlarmNotification(mContext: Context?, intent: Intent?){
-        val todoData = intent?.getParcelableExtra<TodoModel>(DATA_TODO)
+        val todoData:TodoModel? = Gson().fromJson(intent?.getStringExtra(DATA_TODO),TodoModel::class.java)
+
         val mNotificationManager = mContext?.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         val mAlarmSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
         val mVibration = longArrayOf(1000,1000,1000,1000)
