@@ -40,6 +40,7 @@ import id.sekdes.todoapps.views.util.Constant
 import id.sekdes.todoapps.views.util.DateUtil
 import java.io.File
 import java.io.IOException
+import java.time.LocalDate
 import java.time.LocalTime
 import java.util.*
 import kotlin.collections.ArrayList
@@ -120,6 +121,7 @@ class AddFragment : Fragment(), TodoAddContract.View , ImageAdapter.ImageListene
                 presenter.insertTodo(
                     TodoModel(
                         title = etTitle.text.toString(),
+                        dueDate = getCurrentDate(),
                         dueTime = pickerTime.toString(),
                         images = ArrayList(imageList.asSequence().map { it.toString() }.toList())
                     )
@@ -127,6 +129,7 @@ class AddFragment : Fragment(), TodoAddContract.View , ImageAdapter.ImageListene
             }
 
         }
+
 
         // Create an ArrayAdapter
         val adapter = ArrayAdapter.createFromResource(
@@ -137,6 +140,12 @@ class AddFragment : Fragment(), TodoAddContract.View , ImageAdapter.ImageListene
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         // Apply the adapter to the spinner
         binding.spinner.adapter = adapter
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun getCurrentDate(): String{
+        val date = LocalDate.now()
+        return date.format(DateUtil.dateFormat).toString()
     }
 
     private fun showImagePickerOptions() {
@@ -160,7 +169,7 @@ class AddFragment : Fragment(), TodoAddContract.View , ImageAdapter.ImageListene
             val startHour = instance.get(Calendar.HOUR_OF_DAY)
             val startMinute = instance.get(Calendar.MINUTE)
 
-            val timePickerDialog = TimePickerDialog(requireContext(), { _, hour, minute ->
+            TimePickerDialog(requireContext(), { _, hour, minute ->
                 pickerTime =
                     LocalTime.of(
                         hour,
@@ -273,9 +282,9 @@ class AddFragment : Fragment(), TodoAddContract.View , ImageAdapter.ImageListene
 
 
     override fun onSuccessInsertTodo(todoModel: TodoModel) {
-        requireActivity().runOnUiThread {
+        activity?.runOnUiThread {
             Toast.makeText(context, "New Task is assigned", Toast.LENGTH_LONG).show()
-            requireActivity().onBackPressed()
+            activity?.onBackPressed()
         }
     }
 
