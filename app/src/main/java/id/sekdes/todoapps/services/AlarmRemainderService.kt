@@ -143,8 +143,10 @@ class AlarmRemainderService: BroadcastReceiver() {
 
         mNotificationManager.notify(0,mNotificationBuilder.build())
 
-        if (todoData !=null)
+        if (todoData !=null && todoData.reminder){
+            todoData.reminder = false
             setAlarmReminder(mContext, todoData, false)
+        }
     }
 
 

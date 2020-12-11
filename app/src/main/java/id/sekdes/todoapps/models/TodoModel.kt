@@ -13,7 +13,7 @@ data class TodoModel(
     val voiceNote: String = "",
     var isDone: Boolean = false,
     val dueTime: String = "",
-    val reminder: Boolean = false,
+    var reminder: Boolean = true,
     val reminderTime: Int = 0
 ) : Parcelable
 

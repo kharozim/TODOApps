@@ -10,6 +10,7 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -225,9 +226,10 @@ class AddFragment : Fragment(), TodoAddContract.View , ImageAdapter.ImageListene
             minuteReminder = 60.plus(minuteReminder)
         }
 
-        if (minuteReminder < startMinute)
-            isSetTime = false
-        if (hourReminder >= startHour){
+        if (hourReminder == startHour)
+            isSetTime = minuteReminder > startMinute
+
+        if (hourReminder > startHour){
             isSetTime = true
         }
 
