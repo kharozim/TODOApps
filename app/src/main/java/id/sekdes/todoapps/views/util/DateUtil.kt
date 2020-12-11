@@ -7,7 +7,7 @@ import java.time.format.DateTimeFormatter
 @RequiresApi(Build.VERSION_CODES.O)
 object DateUtil {
     val dateFormat_simple = DateTimeFormatter.ofPattern("d.LLL")
-    val dateFormat = DateTimeFormatter.ofPattern("dd-MM-yyyy")
+    val dateFormat = "dd-MM-yyyy"
     val timeFormat = DateTimeFormatter.ofPattern("HH:mm")
     val dateTimeFormat_simple = DateTimeFormatter.ofPattern("d.LLL HH:mm")
 }

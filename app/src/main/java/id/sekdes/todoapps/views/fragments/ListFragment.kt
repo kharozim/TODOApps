@@ -16,6 +16,7 @@ import id.sekdes.todoapps.repository.TodoLocalRepository
 import id.sekdes.todoapps.repository.locale.TodoLocalRepositoryImpl
 import id.sekdes.todoapps.repository.locale.daos.TodoDao
 import id.sekdes.todoapps.repository.locale.databases.LocaleDatabase
+import id.sekdes.todoapps.services.AlarmRemainderService.Companion.cancelAlarmReminder
 import id.sekdes.todoapps.views.adapters.TodoTodayAdapter
 import id.sekdes.todoapps.views.contracts.TodoDeleteContract
 
@@ -101,7 +102,8 @@ class ListFragment :
     }
 
     override fun onDone(todo: TodoModel) {
-            presenter.getEditTodo(todo)
+        presenter.getEditTodo(todo)
+        cancelAlarmReminder(requireContext(),todo.id.toInt())
     }
 
     override fun onDelete(todo: TodoModel) {
