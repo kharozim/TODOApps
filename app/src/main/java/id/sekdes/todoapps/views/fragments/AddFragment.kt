@@ -231,6 +231,8 @@ class AddFragment : Fragment(), TodoAddContract.View , ImageAdapter.ImageListene
             isSetTime = true
         }
 
+        binding.btSave.isEnabled = isSetTime
+
         return isSetTime
     }
 
