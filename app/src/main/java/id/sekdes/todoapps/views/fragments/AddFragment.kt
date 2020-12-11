@@ -163,7 +163,8 @@ class AddFragment : Fragment(), TodoAddContract.View , ImageAdapter.ImageListene
                             Toast.LENGTH_SHORT
                         ).show()
                         btTime.text = Constant.SELECT_DATE
-                    }
+                    }else
+                        btTime.text = SimpleDateFormat(TIME_FORMAT, Locale.getDefault()).format(pickerTimeAlt.time)
                     initAdapter = false
                 }
 
