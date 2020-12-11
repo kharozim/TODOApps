@@ -14,7 +14,7 @@ data class TodoModel(
     var isDone: Boolean = false,
     val dueTime: String = "",
     val reminder: Boolean = false,
-    val reminderTime: Double = 0.0
+    val reminderTime: Int = 0
 ) : Parcelable
 
 fun TodoModel.toEntity() = TodoEntity(id, title, ArrayListConverter.fromArrayList(images), voiceNote, isDone, dueTime, reminder, reminderTime)

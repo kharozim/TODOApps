@@ -15,7 +15,7 @@ data class TodoEntity(
     @ColumnInfo(name = "isDone") val isDone: Boolean = false,
     @ColumnInfo(name = "dueTime")  val dueTime: String ="",
     @ColumnInfo(name = "reminder") val reminder: Boolean = false,
-    @ColumnInfo(name = "reminderTime") val reminderTime: Double = 0.0
+    @ColumnInfo(name = "reminderTime") val reminderTime: Int = 0
 
 )
 

@@ -28,7 +28,7 @@ class AlarmRemainderService: BroadcastReceiver() {
 
         const val TIME_FORMAT = "HH:mm"
 
-        fun setAlarmReminder(mContext: Context, todoData: TodoModel){
+        fun setAlarmReminder(mContext: Context, todoData: TodoModel, isReminder: Boolean){
             if (!isFormatValid(todoData.dueTime)){
                 Toast.makeText(mContext, mContext.getString(R.string.reminder_failed), Toast.LENGTH_SHORT).show()
                 return
@@ -43,6 +43,17 @@ class AlarmRemainderService: BroadcastReceiver() {
                 it.isEmpty()
             }.toTypedArray()
 
+            if (isReminder){
+                val minuteBefore = mTimeArray[1].toInt().minus(todoData.reminderTime)
+
+                mTimeArray[1] = minuteBefore.toString()
+
+                if (minuteBefore < 0){
+                    mTimeArray[0] = mTimeArray[0].toInt().minus(1).toString()
+                    mTimeArray[1] = 60.plus(minuteBefore).toString()
+                }
+            }
+
             val mCalendarOfDay = Calendar.getInstance()
             mCalendarOfDay.set(Calendar.HOUR_OF_DAY, Integer.parseInt(mTimeArray[0]))
             mCalendarOfDay.set(Calendar.MINUTE, Integer.parseInt(mTimeArray[1]))
@@ -51,7 +62,8 @@ class AlarmRemainderService: BroadcastReceiver() {
             val mPendingIntent = PendingIntent.getBroadcast(mContext, todoData.id.toInt(), mIntent,0)
             mAlarmManager.set(AlarmManager.RTC_WAKEUP, mCalendarOfDay.timeInMillis, mPendingIntent)
 
-            Toast.makeText(mContext,mContext.getString(R.string.reminder_success), Toast.LENGTH_SHORT).show()
+            if (isReminder)
+                Toast.makeText(mContext,mContext.getString(R.string.reminder_success), Toast.LENGTH_SHORT).show()
 
         }
 
@@ -131,6 +143,8 @@ class AlarmRemainderService: BroadcastReceiver() {
 
         mNotificationManager.notify(0,mNotificationBuilder.build())
 
+        if (todoData !=null)
+            setAlarmReminder(mContext, todoData, false)
     }
 
 
