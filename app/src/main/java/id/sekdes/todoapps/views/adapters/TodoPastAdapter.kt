@@ -9,6 +9,8 @@ import androidx.recyclerview.widget.RecyclerView
 import id.sekdes.todoapps.databinding.ItemListTodoBinding
 import id.sekdes.todoapps.databinding.ItemListTodoHeaderBinding
 import id.sekdes.todoapps.models.TodoModel
+import id.sekdes.todoapps.views.util.DateUtil
+import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
@@ -53,23 +55,24 @@ class TodoPastAdapter(
         }
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     fun generateTodo(it: List<TodoModel>){
         println(it)
         val list = mutableListOf<Todo>()
         val sortedList = it.sortedByDescending { it.dueDate }
         var temp = ""
-        val dateNow = LocalDate.now()
+        val dateNow = Calendar.getInstance().time
+
+        val mFormatDate = SimpleDateFormat(DateUtil.dateFormat, Locale.getDefault())
 
         sortedList.forEach { model ->
             val date = model.dueDate
-            if (date.isNotEmpty() && LocalDate.parse(date, DateTimeFormatter.ofPattern("dd-MM-yyyy")).isBefore(dateNow) && model.isDone){
+
+            if (date.isNotEmpty() && mFormatDate.parse(date)?.before(mFormatDate.parse(mFormatDate.format(dateNow))) == true && model.isDone){
                 if (temp != date) {
                     temp = date
 
                     list.add(Todo.Category(
-                        LocalDate.parse(date, DateTimeFormatter.ofPattern("dd-MM-yyyy")).format(DateTimeFormatter.ofLocalizedDate(
-                        FormatStyle.MEDIUM))
+                        SimpleDateFormat("dd-MMM-yyyy", Locale.getDefault()).format(mFormatDate.parse(date)?:dateNow)
                     ))
                 }
                 list.add(Todo.Data(model))

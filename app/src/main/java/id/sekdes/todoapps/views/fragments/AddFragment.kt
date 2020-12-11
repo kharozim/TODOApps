@@ -125,7 +125,7 @@ class AddFragment : Fragment(), TodoAddContract.View , ImageAdapter.ImageListene
 
                 val todo = TodoModel(
                     title = etTitle.text.toString(),
-                    dueDate = getCurrentDate(),
+                    dueDate = "10-02-2020",
                     dueTime = SimpleDateFormat(TIME_FORMAT, Locale.getDefault()).format(pickerTimeAlt.time),
                     images = ArrayList(imageList.asSequence().map { it.toString() }.toList()),
                     reminderTime = reminderSet.time
