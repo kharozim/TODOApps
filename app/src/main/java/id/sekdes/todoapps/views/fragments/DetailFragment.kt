@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import id.sekdes.todoapps.views.contracts.TodoEditContract
 import id.sekdes.todoapps.databinding.FragmentDetailBinding
@@ -21,10 +22,10 @@ import id.sekdes.todoapps.views.adapters.ImageAdapter
 import id.sekdes.todoapps.views.adapters.ImageDetailAdapter
 
 
-class DetailFragment : Fragment(), TodoEditContract.View {
+class DetailFragment : Fragment(), TodoEditContract.View, ImageAdapter.ImageListener {
 
     private val args by navArgs<DetailFragmentArgs>()
-    private val imageAdapter by lazy { ImageDetailAdapter(requireContext()) }
+    private val imageAdapter by lazy { ImageDetailAdapter(requireContext(), this) }
 
     //    private val imageAdapter by lazy {ImageDetailAdapter(requireContext())  }
     private lateinit var binding: FragmentDetailBinding
@@ -93,6 +94,15 @@ class DetailFragment : Fragment(), TodoEditContract.View {
         TODO("Not yet implemented")
     }
 
+    override fun onClick(uri: Uri) {
+
+        val action = DetailFragmentDirections.actionDetailFragmentToImageFragment(uri.toString())
+        findNavController().navigate(action)
+    }
+
+    override fun onDelete(uri: Uri) {
+        TODO("Not yet implemented")
+    }
 
 
 }

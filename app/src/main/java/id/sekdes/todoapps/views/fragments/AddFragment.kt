@@ -18,6 +18,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import com.karumi.dexter.Dexter
 import com.karumi.dexter.MultiplePermissionsReport
 import com.karumi.dexter.PermissionToken
@@ -386,8 +387,8 @@ class AddFragment : Fragment(), TodoAddContract.View, ImageAdapter.ImageListener
     }
 
     override fun onClick(uri: Uri) {
-
-
+        val action = AddFragmentDirections.actionAddFragmentToImageFragment(uri.toString())
+        findNavController().navigate(action)
     }
 
     override fun onDelete(uri: Uri) {
