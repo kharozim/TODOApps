@@ -52,7 +52,7 @@ import java.util.*
 import kotlin.collections.ArrayList
 
 
-class AddFragment : Fragment(), TodoAddContract.View , ImageAdapter.ImageListener{
+class AddFragment : Fragment(), TodoAddContract.View, ImageAdapter.ImageListener {
 
     private val REQUEST_IMAGE = 100
     private val pickerTimeAlt: Calendar = Calendar.getInstance()
@@ -123,16 +123,21 @@ class AddFragment : Fragment(), TodoAddContract.View , ImageAdapter.ImageListene
 
 
             btSave.setOnClickListener {
+                if (etTitle.text.isNullOrEmpty()) {
+                    showMessage("Title tidak boleh kosong")
+                } else {
+                    val todo = TodoModel(
+                        title = etTitle.text.toString(),
+                        dueDate = getCurrentDate(),
+                        dueTime = SimpleDateFormat(TIME_FORMAT, Locale.getDefault()).format(
+                            pickerTimeAlt.time
+                        ),
+                        images = ArrayList(imageList.asSequence().map { it.toString() }.toList()),
+                        reminderTime = reminderSet.time
 
-                val todo = TodoModel(
-                    title = etTitle.text.toString(),
-                    dueDate = getCurrentDate(),
-                    dueTime = SimpleDateFormat(TIME_FORMAT, Locale.getDefault()).format(pickerTimeAlt.time),
-                    images = ArrayList(imageList.asSequence().map { it.toString() }.toList()),
-                    reminderTime = reminderSet.time
-
-                )
-                presenter.insertTodo(todo)
+                    )
+                    presenter.insertTodo(todo)
+                }
             }
 
         }
@@ -148,26 +153,38 @@ class AddFragment : Fragment(), TodoAddContract.View , ImageAdapter.ImageListene
 
         // Apply the adapter to the spinner
         var initAdapter = true
-        binding.run{
+        binding.run {
             spinner.adapter = adapter
-            spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
-                override fun onItemSelected(p0: AdapterView<*>?, p1: View?, position: Int, p3: Long) {
-                    reminderSet = when(position){
+            spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                override fun onItemSelected(
+                    p0: AdapterView<*>?,
+                    p1: View?,
+                    position: Int,
+                    p3: Long
+                ) {
+                    reminderSet = when (position) {
                         0 -> ReminderTime.BEFORE15
                         1 -> ReminderTime.BEFORE30
                         2 -> ReminderTime.BEFORE45
                         else -> ReminderTime.BEFORE15
                     }
 
-                    if (!isCanSetTime(pickerTimeAlt.get(Calendar.HOUR_OF_DAY),pickerTimeAlt.get(Calendar.MINUTE)) && !initAdapter){
+                    if (!isCanSetTime(
+                            pickerTimeAlt.get(Calendar.HOUR_OF_DAY),
+                            pickerTimeAlt.get(Calendar.MINUTE)
+                        ) && !initAdapter
+                    ) {
                         Toast.makeText(
                             requireContext(),
                             "Tidak bisa mengatur reminder",
                             Toast.LENGTH_SHORT
                         ).show()
                         btTime.text = Constant.SELECT_DATE
-                    }else
-                        btTime.text = SimpleDateFormat(TIME_FORMAT, Locale.getDefault()).format(pickerTimeAlt.time)
+                    } else
+                        btTime.text = SimpleDateFormat(
+                            TIME_FORMAT,
+                            Locale.getDefault()
+                        ).format(pickerTimeAlt.time)
                     initAdapter = false
                 }
 
@@ -177,8 +194,12 @@ class AddFragment : Fragment(), TodoAddContract.View , ImageAdapter.ImageListene
         }
     }
 
+    private fun showMessage(message: String) {
+        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+    }
 
-    private fun getCurrentDate(): String{
+
+    private fun getCurrentDate(): String {
         val date = Calendar.getInstance()
         return SimpleDateFormat(DateUtil.dateFormat, Locale.getDefault()).format(date.time)
     }
@@ -205,11 +226,11 @@ class AddFragment : Fragment(), TodoAddContract.View , ImageAdapter.ImageListene
 
             TimePickerDialog(requireContext(), { _, hour, minute ->
 
-                pickerTimeAlt.set(Calendar.HOUR_OF_DAY,hour)
-                pickerTimeAlt.set(Calendar.MINUTE,minute)
+                pickerTimeAlt.set(Calendar.HOUR_OF_DAY, hour)
+                pickerTimeAlt.set(Calendar.MINUTE, minute)
 
 
-                if (!isCanSetTime(hour,minute)) {
+                if (!isCanSetTime(hour, minute)) {
                     Toast.makeText(
                         requireContext(),
                         "Jam Sudah Terlewat",
@@ -217,14 +238,17 @@ class AddFragment : Fragment(), TodoAddContract.View , ImageAdapter.ImageListene
                     ).show()
                     btTime.text = Constant.SELECT_DATE
                 } else {
-                    btTime.text = SimpleDateFormat(TIME_FORMAT, Locale.getDefault()).format(pickerTimeAlt.time)
+                    btTime.text = SimpleDateFormat(
+                        TIME_FORMAT,
+                        Locale.getDefault()
+                    ).format(pickerTimeAlt.time)
                 }
             }, startHour, startMinute, true).show()
 
         }
     }
 
-    private fun isCanSetTime(hour: Int, minute: Int): Boolean{
+    private fun isCanSetTime(hour: Int, minute: Int): Boolean {
         val instance = Calendar.getInstance()
         val startHour = instance.get(Calendar.HOUR_OF_DAY)
         val startMinute = instance.get(Calendar.MINUTE)
@@ -233,15 +257,15 @@ class AddFragment : Fragment(), TodoAddContract.View , ImageAdapter.ImageListene
 
         var minuteReminder = minute.minus(reminderSet.time)
         var hourReminder = hour
-        if (minuteReminder<0){
-            hourReminder = hour-1
+        if (minuteReminder < 0) {
+            hourReminder = hour - 1
             minuteReminder = 60.plus(minuteReminder)
         }
 
         if (hourReminder == startHour)
             isSetTime = minuteReminder > startMinute
 
-        if (hourReminder > startHour){
+        if (hourReminder > startHour) {
             isSetTime = true
         }
 
@@ -341,8 +365,9 @@ class AddFragment : Fragment(), TodoAddContract.View , ImageAdapter.ImageListene
     override fun onSuccessInsertTodo(todoModel: TodoModel) {
 
         requireActivity().runOnUiThread {
-            setAlarmReminder(requireContext(),todoModel)
-            Toast.makeText(context, "New Task is assigned: ${todoModel.title}", Toast.LENGTH_LONG).show()
+            setAlarmReminder(requireContext(), todoModel)
+            Toast.makeText(context, "New Task is assigned: ${todoModel.title}", Toast.LENGTH_LONG)
+                .show()
             requireActivity().onBackPressed()
         }
     }
