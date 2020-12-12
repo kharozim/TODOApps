@@ -12,6 +12,7 @@ import android.os.Bundle
 import android.provider.Settings
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
@@ -37,6 +38,7 @@ import id.sekdes.todoapps.repository.locale.daos.TodoDao
 import id.sekdes.todoapps.repository.locale.databases.LocaleDatabase
 import id.sekdes.todoapps.services.AlarmRemainderService.Companion.TIME_FORMAT
 import id.sekdes.todoapps.services.AlarmRemainderService.Companion.setAlarmReminder
+import id.sekdes.todoapps.views.AudioActivity
 import id.sekdes.todoapps.views.ImagePickerActivity
 import id.sekdes.todoapps.views.adapters.ImageAdapter
 import id.sekdes.todoapps.views.contracts.TodoAddContract
@@ -62,6 +64,7 @@ class AddFragment : Fragment(), TodoAddContract.View , ImageAdapter.ImageListene
     private val presenter: TodoAddContract.Presenter by lazy { TodoAddPresenter(this, repository) }
     private val imageList = mutableListOf<Uri>()
     private var reminderSet = ReminderTime.BEFORE15
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -119,6 +122,8 @@ class AddFragment : Fragment(), TodoAddContract.View , ImageAdapter.ImageListene
                     }).check()
 
             }
+            ///
+
 
 
             btSave.setOnClickListener {
