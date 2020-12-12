@@ -21,10 +21,10 @@ import id.sekdes.todoapps.views.adapters.ImageAdapter
 import id.sekdes.todoapps.views.adapters.ImageDetailAdapter
 
 
-class DetailFragment : Fragment(), ImageAdapter.ImageListener, TodoEditContract.View {
+class DetailFragment : Fragment(), TodoEditContract.View {
 
     private val args by navArgs<DetailFragmentArgs>()
-    private val imageAdapter by lazy { ImageAdapter(requireContext(), this) }
+    private val imageAdapter by lazy { ImageDetailAdapter(requireContext()) }
 
     //    private val imageAdapter by lazy {ImageDetailAdapter(requireContext())  }
     private lateinit var binding: FragmentDetailBinding
@@ -46,12 +46,9 @@ class DetailFragment : Fragment(), ImageAdapter.ImageListener, TodoEditContract.
             rvImage.adapter = imageAdapter
 
             etTitle.setText(args.todo.title)
-            tvTime.setText(args.todo.dueTime)
+            tvTime.text = args.todo.dueTime
             args.todo.images?.asSequence()?.map { Uri.parse(it) }
                 ?.toMutableList()?.let { imageAdapter.setData(it) }
-
-
-
 
             btUpdate.setOnClickListener {
                 presenter.getEditTodo(
@@ -67,6 +64,10 @@ class DetailFragment : Fragment(), ImageAdapter.ImageListener, TodoEditContract.
                         voiceNote = args.todo.voiceNote
                     )
                 )
+            }
+
+            btClose.setOnClickListener {
+                activity?.onBackPressed()
             }
         }
         return binding.root
@@ -92,13 +93,6 @@ class DetailFragment : Fragment(), ImageAdapter.ImageListener, TodoEditContract.
         TODO("Not yet implemented")
     }
 
-    override fun onClick(uri: Uri) {
-        TODO("Not yet implemented")
-    }
-
-    override fun onDelete(uri: Uri) {
-        TODO("Not yet implemented")
-    }
 
 
 }

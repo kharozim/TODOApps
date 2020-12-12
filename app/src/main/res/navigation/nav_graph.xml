@@ -43,4 +43,24 @@
             app:popUpTo="@id/homeFragment"
             app:popUpToInclusive="false" />
     </fragment>
+    <fragment
+        android:id="@+id/missedFragment"
+        android:name="id.sekdes.todoapps.views.fragments.MissedFragment"
+        android:label="fragment_missed"
+        tools:layout="@layout/fragment_missed" >
+        <action
+            android:id="@+id/action_missedFragment_to_detailFragment"
+            app:destination="@id/detailFragment"
+            app:popUpTo="@id/missedFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/pastFragment"
+        android:name="id.sekdes.todoapps.views.fragments.PastFragment"
+        android:label="fragment_past"
+        tools:layout="@layout/fragment_past" >
+        <action
+            android:id="@+id/action_pastFragment_to_detailFragment"
+            app:destination="@id/detailFragment"
+            app:popUpTo="@id/pastFragment" />
+    </fragment>
 </navigation>

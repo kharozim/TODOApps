@@ -63,7 +63,7 @@ class TodoTodayAdapter(
     interface TodoListener {
         fun onClick(todo: TodoModel)
         fun onDone(todo: TodoModel)
-        fun onDelete(todo: TodoModel)
+        fun onLongPress(todo: TodoModel, position: Int)
     }
     fun generateTodo(it: List<TodoModel>){
 
@@ -129,6 +129,10 @@ class TodoTodayAdapter(
                 root.setOnClickListener {
                     listener.onClick(todo.todo)
                 }
+                root.setOnLongClickListener {
+                    listener.onLongPress(todo.todo, position)
+                    return@setOnLongClickListener true
+                }
                 cbDone.setOnClickListener {
                     todo.todo.isDone = !todo.todo.isDone
 
@@ -151,9 +155,15 @@ class TodoTodayAdapter(
         }
     }
 
-    fun deleteData(position: Int) {
-        todoList.removeAt(position)
-        notifyItemRemoved(position)
+    fun deleteData(todo: TodoModel) {
+        val model = Todo.Data(todo)
+        val index = todoList.indexOfFirst { it == model }
+        if (index != -1) {
+            todoList.removeAt(index)
+
+            notifyItemRemoved(index)
+        }
+
     }
 
     class HeaderViewHolder(

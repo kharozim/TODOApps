@@ -26,5 +26,11 @@ private val repository: TodoLocalRepository
         }
         return todoList
     }
+    override fun getEditTodo(todoModel: TodoModel) {
+        executor.execute {
+            val todo = repository.updateTodo(todoModel)
+            view.onSuccessUpdateTodo(todo)
+        }
+    }
 
 }
