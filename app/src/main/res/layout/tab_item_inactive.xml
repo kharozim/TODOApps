@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <android.widget.Button
+        android:id="@+id/bt_tab_inactive"
+        style="?android:attr/borderlessButtonStyle"
+        android:layout_width="150dp"
+        android:layout_height="48dp"
+        android:background="@drawable/tap_button_bg"
+        android:clickable="true"
+        android:focusable="true"
+        android:fontFamily="@font/montserrat_semi_bold"
+        android:foreground="?attr/selectableItemBackgroundBorderless"
+        android:text="Done"
+        android:textAllCaps="false"
+        android:textColor="@color/font"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>

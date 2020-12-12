@@ -22,6 +22,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
+import com.igreenwood.loupe.Loupe
 import com.karumi.dexter.Dexter
 import com.karumi.dexter.MultiplePermissionsReport
 import com.karumi.dexter.PermissionToken
@@ -347,11 +348,14 @@ class AddFragment : Fragment(), TodoAddContract.View , ImageAdapter.ImageListene
     }
 
     override fun onClick(uri: Uri) {
-        TODO("Not yet implemented")
+
+
     }
 
     override fun onDelete(uri: Uri) {
         imageAdapter.deleteData(uri)
     }
+
+
 }
 

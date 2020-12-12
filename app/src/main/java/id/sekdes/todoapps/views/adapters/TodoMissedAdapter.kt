@@ -3,6 +3,7 @@ package id.sekdes.todoapps.views.adapters
 import android.content.Context
 import android.os.Build
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.RecyclerView
@@ -105,6 +106,11 @@ class TodoMissedAdapter(
 
         if (todo is Todo.Data && holder is MyViewHolder) {
             holder.itemBinding.todo = todo.todo
+            holder.itemBinding.apply {
+                ivImage.visibility = if (todo.todo.images.isNullOrEmpty()) View.GONE else View.VISIBLE
+                ivVoiceNote.visibility = if (todo.todo.voiceNote.isEmpty()) View.GONE else View.VISIBLE
+
+            }
         } else if (todo is Todo.Category && holder is HeaderViewHolder) {
             holder.bindData(todo.date)
         }
@@ -134,6 +140,7 @@ class TodoMissedAdapter(
 
         init {
             this.binding = itemBinding
+
         }
     }
 

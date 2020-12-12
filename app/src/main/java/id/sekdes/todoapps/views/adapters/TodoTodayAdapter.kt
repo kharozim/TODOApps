@@ -1,7 +1,9 @@
 package id.sekdes.todoapps.views.adapters
 
 import android.content.Context
+import android.opengl.Visibility
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
@@ -60,6 +62,9 @@ class TodoTodayAdapter(
         val model = todoList[position]
         holder.itemListTodoBinding.todo = model
         holder.itemListTodoBinding.apply {
+            ivImage.visibility = if (model.images.isNullOrEmpty()) View.GONE else View.VISIBLE
+            ivVoiceNote.visibility = if (model.voiceNote.isEmpty()) View.GONE else View.VISIBLE
+
             root.setOnClickListener {
                 listener.onClick(todo!!)
             }

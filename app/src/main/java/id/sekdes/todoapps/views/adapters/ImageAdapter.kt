@@ -4,9 +4,11 @@ import android.content.Context
 import android.net.Uri
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.ImageView
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.igreenwood.loupe.Loupe
 import id.sekdes.todoapps.R
 import id.sekdes.todoapps.databinding.ItemListAddImageBinding
 import id.sekdes.todoapps.databinding.ItemListAddImageMoreBinding
@@ -36,6 +38,20 @@ class ImageAdapter(
                 Glide.with(context)
                     .load(uri)
                     .into(ivImage)
+
+                Loupe.create(ivImage, imageContainer) {
+                    useFlingToDismissGesture = false
+                    onViewTranslateListener = object : Loupe.OnViewTranslateListener {
+
+                        override fun onStart(view: ImageView) {}
+
+                        override fun onViewTranslate(view: ImageView, amount: Float) {}
+
+                        override fun onRestore(view: ImageView) {}
+
+                        override fun onDismiss(view: ImageView) {}
+                    }
+                }
 
                 imageButton.setOnClickListener { listener.onDelete(uri) }
             }
