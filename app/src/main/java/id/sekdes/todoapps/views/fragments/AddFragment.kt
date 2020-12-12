@@ -168,25 +168,22 @@ class AddFragment : Fragment(), TodoAddContract.View, ImageAdapter.ImageListener
                     presenter.insertTodo(todo)
                 }
             }
-            ///
             btRecord?.setOnTouchListener(View.OnTouchListener { v, event -> // TODO Auto-generated method stub
                 when (event.action) {
                     MotionEvent.ACTION_DOWN -> {
-//                        AppLog.logString("Start Recording")
                         record()
-                        Toast.makeText(requireContext(),"onpress",Toast.LENGTH_SHORT).show()
+                        Toast.makeText(requireContext(), "onpress", Toast.LENGTH_SHORT).show()
                         return@OnTouchListener true
                     }
                     MotionEvent.ACTION_UP -> {
                         mediaRecorder.stop()
-                        Toast.makeText(requireContext(),"releas",Toast.LENGTH_SHORT).show()
+                        Toast.makeText(requireContext(), "releas", Toast.LENGTH_SHORT).show()
                     }
                 }
                 false
             })
-            ///
 
-            btPlay.setOnClickListener{
+            btPlay.setOnClickListener {
                 play()
             }
 
@@ -441,11 +438,12 @@ class AddFragment : Fragment(), TodoAddContract.View, ImageAdapter.ImageListener
         imageAdapter.deleteData(uri)
     }
 
-        fun requestPermission() {
+    fun requestPermission() {
         ActivityCompat.requestPermissions(requireActivity(), permissions, REQUEST_PERMISSION_CODE)
     }
-////audio
-     fun record() {
+
+    ////audio
+    fun record() {
         if (checkPermissionFromDevice()) {
             pathSave =
                 "${requireActivity().externalCacheDir?.absolutePath}/myRecording.3gp"
@@ -462,6 +460,7 @@ class AddFragment : Fragment(), TodoAddContract.View, ImageAdapter.ImageListener
         }
 
     }
+
     fun play() {
 
         mediaPlayer = MediaPlayer()
@@ -473,6 +472,7 @@ class AddFragment : Fragment(), TodoAddContract.View, ImageAdapter.ImageListener
         }
         mediaPlayer.start()
     }
+
     //
     private fun setMediaRecorder() {
         mediaRecorder = MediaRecorder()
@@ -489,7 +489,10 @@ class AddFragment : Fragment(), TodoAddContract.View, ImageAdapter.ImageListener
             android.Manifest.permission.WRITE_EXTERNAL_STORAGE
         )
         val record_audio_result: Int =
-            ContextCompat.checkSelfPermission(requireContext(), android.Manifest.permission.RECORD_AUDIO)
+            ContextCompat.checkSelfPermission(
+                requireContext(),
+                android.Manifest.permission.RECORD_AUDIO
+            )
         return write_external_storage_result == PackageManager.PERMISSION_GRANTED &&
                 record_audio_result == PackageManager.PERMISSION_GRANTED
     }
@@ -501,9 +504,7 @@ class AddFragment : Fragment(), TodoAddContract.View, ImageAdapter.ImageListener
     ) {
         when (requestCode) {
             REQUEST_PERMISSION_CODE -> if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-//                Toast.makeText(this, "Permission Granted", Toast.LENGTH_LONG).show()
             } else {
-//                Toast.makeText(this, "Permission Denied", Toast.LENGTH_LONG).show()
             }
         }
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
