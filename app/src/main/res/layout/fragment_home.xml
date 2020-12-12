@@ -13,35 +13,55 @@
         android:id="@+id/tv_my_todo"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_margin="16dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="32dp"
+        android:fontFamily="@font/montserrat_semi_bold"
         android:text="My Todos"
         android:textColor="@color/font"
-        android:textSize="36sp"
+        android:textSize="28sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/tl_home"
+        style="@style/MyCustomTabLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="16dp"
-        android:background="@color/background"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="24dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_my_todo"
-        app:tabMode="fixed">
+        app:tabIndicatorHeight="0dp"
+        app:tabInlineLabel="false"
+        app:tabMode="fixed"
+        app:tabPaddingEnd="8dp"
+        app:tabPaddingStart="8dp"
+        app:tabSelectedTextColor="@color/white"
+        app:tabTextColor="@color/font">
 
         <com.google.android.material.tabs.TabItem
-            android:layout_width="wrap_content"
+            android:layout_width="150dp"
             android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:padding="16dp"
             android:text="Today" />
 
         <com.google.android.material.tabs.TabItem
-            android:layout_width="wrap_content"
+            android:layout_width="150dp"
             android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:padding="8dp"
+
             android:text="Important" />
 
         <com.google.android.material.tabs.TabItem
-            android:layout_width="wrap_content"
+            android:layout_width="150dp"
             android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:padding="8dp"
+
             android:text="Past" />
 
     </com.google.android.material.tabs.TabLayout>
@@ -51,7 +71,6 @@
         android:layout_height="0dp"
         android:layout_marginTop="16dp"
         android:background="@drawable/bg_round"
-        android:padding="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

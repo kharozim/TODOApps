@@ -49,7 +49,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="24dp"
             android:layout_marginTop="16dp"
-            android:text="Add new Todo"
+            android:text="Add new task"
             android:textColor="@color/font"
             android:textSize="30sp"
             android:textStyle="bold"
