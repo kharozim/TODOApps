@@ -134,7 +134,7 @@ class TodoPastAdapter(
         fun bindData(date: String){
             binding.run {
 
-                tvDateHeader.text = date.toUpperCase(Locale.getDefault())
+                tvDateHeader.text = date
             }
 
         }

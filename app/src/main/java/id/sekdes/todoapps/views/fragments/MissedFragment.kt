@@ -65,7 +65,6 @@ class MissedFragment : Fragment(), TodoMissedAdapter.TodoListener, TodoListContr
 
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     override fun onSuccessGetAllTodo(list: List<TodoModel>) {
         requireActivity().runOnUiThread {
             adapter.generateTodo(list.toMutableList())

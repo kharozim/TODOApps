@@ -61,14 +61,23 @@ class ListFragment :
     override fun onSuccessDeleteTodo(id: Long) {
         requireActivity().runOnUiThread {
             binding.run {
-                adapter.deleteData(id)
+                adapter.deleteData(id.toInt())
             }
         }
     }
 
     override fun onSuccessGetAllTodo(list: List<TodoModel>) {
         requireActivity().runOnUiThread {
-            adapter.setData(list.toMutableList())
+
+            adapter.generateTodo(list.toMutableList())
+
+            binding.apply {
+                val x = adapter.getAllCompleted()
+                val max = adapter.getAllCompleted() + adapter.getAllOngoing()
+                progressBar.max = max
+                progressBar.progress = x
+                tvProgress.text = "$x / $max"
+            }
         }
     }
 
@@ -76,6 +85,8 @@ class ListFragment :
         requireActivity().runOnUiThread {
             adapter.updateData(todoModel)
             Toast.makeText(requireContext(), "${todoModel.id} berhasil diubah", Toast.LENGTH_SHORT).show()
+            presenter.getAllTodo()
+
         }
     }
 

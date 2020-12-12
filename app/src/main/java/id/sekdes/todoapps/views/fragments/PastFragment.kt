@@ -60,7 +60,6 @@ class PastFragment : Fragment(), TodoPastContract.View , TodoPastAdapter.TodoLis
     override fun loading(state: Boolean) {
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     override fun onSuccessGetAllTodo(list: List<TodoModel>) {
         requireActivity().runOnUiThread {
             adapter.generateTodo(list.toMutableList())
