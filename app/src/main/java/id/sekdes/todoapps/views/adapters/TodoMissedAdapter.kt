@@ -16,12 +16,7 @@ import java.time.format.FormatStyle
 import java.util.*
 
 
-sealed class Todo{
-    data class Category(val date: String):Todo()
-    data class Data(val todo: TodoModel): Todo()
-}
-
-class TodoPastAdapter(
+class TodoMissedAdapter(
     private val context: Context, private val listener: TodoListener
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private var todoList = mutableListOf<Todo>()
@@ -56,7 +51,6 @@ class TodoPastAdapter(
 
     @RequiresApi(Build.VERSION_CODES.O)
     fun generateTodo(it: List<TodoModel>){
-        println(it)
         val list = mutableListOf<Todo>()
         val sortedList = it.sortedByDescending { it.dueDate }
         var temp = ""
@@ -64,13 +58,14 @@ class TodoPastAdapter(
 
         sortedList.forEach { model ->
             val date = model.dueDate
-            if (date.isNotEmpty() && LocalDate.parse(date, DateTimeFormatter.ofPattern("dd-MM-yyyy")).isBefore(dateNow) && model.isDone){
+            if (date.isNotEmpty() && LocalDate.parse(date, DateTimeFormatter.ofPattern("dd-MM-yyyy")).isBefore(dateNow) && !model.isDone){
                 if (temp != date) {
                     temp = date
 
                     list.add(Todo.Category(
-                        LocalDate.parse(date, DateTimeFormatter.ofPattern("dd-MM-yyyy")).format(DateTimeFormatter.ofLocalizedDate(
-                        FormatStyle.MEDIUM))
+                        LocalDate.parse(date, DateTimeFormatter.ofPattern("dd-MM-yyyy")).format(
+                            DateTimeFormatter.ofLocalizedDate(
+                            FormatStyle.MEDIUM))
                     ))
                 }
                 list.add(Todo.Data(model))
@@ -94,7 +89,7 @@ class TodoPastAdapter(
         return todoList[position]
     }
 
-    fun addContact(todoModel: Todo) {
+    fun addTodo(todoModel: Todo) {
         todoList.add(0, todoModel)
         notifyItemInserted(0)
     }
@@ -130,7 +125,6 @@ class TodoPastAdapter(
     ): RecyclerView.ViewHolder(binding.root){
         fun bindData(date: String){
             binding.run {
-
                 tvDateHeader.text = date.toUpperCase(Locale.getDefault())
             }
 
@@ -146,6 +140,7 @@ class TodoPastAdapter(
 
         init {
             this.binding = itemBinding
+
         }
     }
 
