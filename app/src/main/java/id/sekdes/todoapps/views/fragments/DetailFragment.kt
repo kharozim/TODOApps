@@ -27,7 +27,6 @@ class DetailFragment : Fragment(), TodoEditContract.View, ImageAdapter.ImageList
     private val args by navArgs<DetailFragmentArgs>()
     private val imageAdapter by lazy { ImageDetailAdapter(requireContext(), this) }
 
-    //    private val imageAdapter by lazy {ImageDetailAdapter(requireContext())  }
     private lateinit var binding: FragmentDetailBinding
     private val dao: TodoDao by lazy { LocaleDatabase.getDatabase(requireContext()).dao() }
     private val repository: TodoLocalRepository by lazy { TodoLocalRepositoryImpl(dao) }
@@ -103,6 +102,7 @@ class DetailFragment : Fragment(), TodoEditContract.View, ImageAdapter.ImageList
     override fun onDelete(uri: Uri) {
         TODO("Not yet implemented")
     }
+
 
 
 }

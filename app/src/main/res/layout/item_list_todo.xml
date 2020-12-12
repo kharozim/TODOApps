@@ -73,6 +73,7 @@
                     app:layout_constraintStart_toEndOf="@id/cb_done"
                     app:layout_constraintTop_toTopOf="parent"
                     tools:text="@{todo.title}"
+                    android:text="Title"
                     android:fontFamily="@font/montserrat_semi_bold"
                     />
 

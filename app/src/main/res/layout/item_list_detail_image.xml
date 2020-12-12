@@ -8,9 +8,10 @@
 
     <ImageView
         android:id="@+id/iv_image"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:scaleType="centerCrop"
+
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:scaleType="fitCenter"
         android:src="@mipmap/ic_launcher" />
 
 </androidx.cardview.widget.CardView>
