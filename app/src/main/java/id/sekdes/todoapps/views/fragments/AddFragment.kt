@@ -159,6 +159,7 @@ class AddFragment : Fragment(), TodoAddContract.View, ImageAdapter.ImageListener
                             pickerTimeAlt.time
                         ),
                         images = ArrayList(imageList.asSequence().map { it.toString() }.toList()),
+                        voiceNote = pathSave,
                         reminder = isReminderActive,
                         reminderTime = reminderSet.time
 
