@@ -7,21 +7,17 @@ import android.app.TimePickerDialog
 import android.content.DialogInterface
 import android.content.Intent
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Toast
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
-import com.bumptech.glide.Glide
 import com.igreenwood.loupe.Loupe
 import com.karumi.dexter.Dexter
 import com.karumi.dexter.MultiplePermissionsReport
@@ -47,7 +43,6 @@ import id.sekdes.todoapps.views.util.ReminderTime
 import java.io.File
 import java.io.IOException
 import java.text.SimpleDateFormat
-import java.time.LocalDate
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -391,7 +386,6 @@ class AddFragment : Fragment(), TodoAddContract.View, ImageAdapter.ImageListener
     }
 
     override fun onClick(uri: Uri) {
-
 
     }
 
