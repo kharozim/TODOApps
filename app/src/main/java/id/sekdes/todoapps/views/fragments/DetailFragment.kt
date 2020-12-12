@@ -22,12 +22,7 @@ class DetailFragment : Fragment(), TodoEditContract.View {
     private lateinit var binding: FragmentDetailBinding
     private val dao: TodoDao by lazy { LocaleDatabase.getDatabase(requireContext()).dao() }
     private val repository: TodoLocalRepository by lazy { TodoLocalRepositoryImpl(dao) }
-    private val presenter: TodoEditContract.Presenter by lazy {
-        TodoEditPresenter(
-            this,
-            repository
-        )
-    }
+    private val presenter: TodoEditContract.Presenter by lazy {TodoEditPresenter(this,repository)}
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
