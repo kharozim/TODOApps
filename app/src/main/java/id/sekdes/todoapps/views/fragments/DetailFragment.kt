@@ -25,11 +25,17 @@ class DetailFragment : Fragment(), ImageAdapter.ImageListener, TodoEditContract.
 
     private val args by navArgs<DetailFragmentArgs>()
     private val imageAdapter by lazy { ImageAdapter(requireContext(), this) }
-//    private val imageAdapter by lazy {ImageDetailAdapter(requireContext())  }
+
+    //    private val imageAdapter by lazy {ImageDetailAdapter(requireContext())  }
     private lateinit var binding: FragmentDetailBinding
     private val dao: TodoDao by lazy { LocaleDatabase.getDatabase(requireContext()).dao() }
     private val repository: TodoLocalRepository by lazy { TodoLocalRepositoryImpl(dao) }
-    private val presenter: TodoEditContract.Presenter by lazy {TodoEditPresenter(this,repository)}
+    private val presenter: TodoEditContract.Presenter by lazy {
+        TodoEditPresenter(
+            this,
+            repository
+        )
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -52,7 +58,13 @@ class DetailFragment : Fragment(), ImageAdapter.ImageListener, TodoEditContract.
                     TodoModel(
                         args.todo.id,
                         title = etTitle.text.toString(),
-                        images = args.todo.images
+                        images = args.todo.images,
+                        dueDate = args.todo.dueDate,
+                        dueTime = args.todo.dueTime,
+                        reminder = args.todo.reminder,
+                        isDone = args.todo.isDone,
+                        reminderTime = args.todo.reminderTime,
+                        voiceNote = args.todo.voiceNote
                     )
                 )
             }
