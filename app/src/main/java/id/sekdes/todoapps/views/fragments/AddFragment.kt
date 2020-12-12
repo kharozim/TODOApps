@@ -63,6 +63,8 @@ class AddFragment : Fragment(), TodoAddContract.View , ImageAdapter.ImageListene
     private val imageList = mutableListOf<Uri>()
     private var reminderSet = ReminderTime.BEFORE15
 
+    private var isReminderActive = true
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -91,6 +93,12 @@ class AddFragment : Fragment(), TodoAddContract.View , ImageAdapter.ImageListene
             btTime.setOnClickListener {
                 openTimePicker()
 
+            }
+
+            mCheckBoxReminder.setOnClickListener {
+                isReminderActive = mCheckBoxReminder.isChecked
+
+                spinner.isEnabled = isReminderActive
             }
 
             ibAddImage.setOnClickListener {
@@ -128,6 +136,7 @@ class AddFragment : Fragment(), TodoAddContract.View , ImageAdapter.ImageListene
                     dueDate = "10-02-2020",
                     dueTime = SimpleDateFormat(TIME_FORMAT, Locale.getDefault()).format(pickerTimeAlt.time),
                     images = ArrayList(imageList.asSequence().map { it.toString() }.toList()),
+                    reminder = isReminderActive,
                     reminderTime = reminderSet.time
 
                 )
@@ -230,18 +239,22 @@ class AddFragment : Fragment(), TodoAddContract.View , ImageAdapter.ImageListene
 
         var isSetTime = false
 
-        var minuteReminder = minute.minus(reminderSet.time)
-        var hourReminder = hour
-        if (minuteReminder<0){
-            hourReminder = hour-1
-            minuteReminder = 60.plus(minuteReminder)
-        }
+        if (isReminderActive){
+            var minuteReminder = minute.minus(reminderSet.time)
+            var hourReminder = hour
+            if (minuteReminder<0){
+                hourReminder = hour-1
+                minuteReminder = 60.plus(minuteReminder)
+            }
 
-        if (hourReminder == startHour)
-            isSetTime = minuteReminder > startMinute
+            if (hourReminder == startHour)
+                isSetTime = minuteReminder > startMinute
 
-        if (hourReminder > startHour){
-            isSetTime = true
+            if (hourReminder > startHour){
+                isSetTime = true
+            }
+        }else{
+            isSetTime = !isReminderActive
         }
 
         binding.btSave.isEnabled = isSetTime
