@@ -45,8 +45,7 @@ class DetailFragment : Fragment(), TodoEditContract.View {
                 presenter.getEditTodo(
                     TodoModel(
                         args.todo.id,
-                        title = etTitle.text.toString(),
-                        dueTime = btTime.text.toString()
+                        title = etTitle.text.toString()
                     )
                 )
             }

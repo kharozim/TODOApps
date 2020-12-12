@@ -128,7 +128,7 @@ class AddFragment : Fragment(), TodoAddContract.View {
                 presenter.insertTodo(
                     TodoModel(
                         title = etTitle.text.toString(),
-                        dueTime = pickerTime.toString()
+                        dueTime = pickerTime
                     )
                 )
             }

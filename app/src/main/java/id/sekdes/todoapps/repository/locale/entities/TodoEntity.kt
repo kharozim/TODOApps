@@ -4,6 +4,7 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import id.sekdes.todoapps.models.TodoModel
+import java.time.LocalTime
 
 @Entity(tableName = "todo_table")
 data class TodoEntity(
@@ -12,7 +13,7 @@ data class TodoEntity(
     @ColumnInfo(name = "images") val images: String,
     @ColumnInfo(name = "voiceNote") val voiceNote: String = "",
     @ColumnInfo(name = "isDone") val isDone: Boolean = false,
-    @ColumnInfo(name = "dueTime")  val dueTime: String ="",
+    @ColumnInfo(name = "dueTime")  val dueTime: LocalTime,
     @ColumnInfo(name = "reminder") val reminder: Boolean = false,
     @ColumnInfo(name = "reminderTime") val reminderTime: Double = 0.0
 
