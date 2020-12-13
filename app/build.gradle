@@ -86,4 +86,10 @@ dependencies {
 
     // yalantis
     implementation 'com.github.yalantis:ucrop:2.2.6'
+
+    // gson
+    implementation 'com.google.code.gson:gson:2.8.6'
+
+    // loupe
+    implementation 'com.igreenwood.loupe:loupe:1.2.1'
 }

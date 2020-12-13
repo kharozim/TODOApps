@@ -1,7 +1,9 @@
 package id.sekdes.todoapps.views.adapters
 
 import android.content.Context
+import android.opengl.Visibility
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
@@ -25,12 +27,7 @@ class TodoTodayAdapter(
 
         init {
             this.binding = itemListTodoBinding
-            itemListTodoBinding.root.setOnClickListener {
-                listener.onClick(itemListTodoBinding.todo!!)
-            }
-//            itemListTodoBinding.ivDel.setOnClickListener {
-//                listener.onDelete(itemListTodoBinding.todo!!)
-//            }
+
         }
     }
 
@@ -49,6 +46,7 @@ class TodoTodayAdapter(
 
     interface TodoListener {
         fun onClick(todo: TodoModel)
+        fun onDone(todo: TodoModel)
         fun onDelete(todo: TodoModel)
     }
 
@@ -61,7 +59,21 @@ class TodoTodayAdapter(
     }
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
-        holder.itemListTodoBinding.todo = todoList[position]
+        val model = todoList[position]
+        holder.itemListTodoBinding.todo = model
+        holder.itemListTodoBinding.apply {
+            ivImage.visibility = if (model.images.isNullOrEmpty()) View.GONE else View.VISIBLE
+            ivVoiceNote.visibility = if (model.voiceNote.isEmpty()) View.GONE else View.VISIBLE
+
+            root.setOnClickListener {
+                listener.onClick(todo!!)
+            }
+            cbDone.setOnClickListener {
+                todo!!.isDone = !todo!!.isDone
+
+                listener.onDone(todo!!)
+            }
+        }
     }
 
     override fun getItemCount(): Int {

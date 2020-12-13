@@ -2,24 +2,30 @@ package id.sekdes.todoapps.views.fragments
 
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.app.Activity.RESULT_OK
 import android.app.TimePickerDialog
 import android.content.DialogInterface
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.media.MediaPlayer
 import android.media.MediaRecorder
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Toast
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
+import com.igreenwood.loupe.Loupe
 import com.karumi.dexter.Dexter
 import com.karumi.dexter.MultiplePermissionsReport
 import com.karumi.dexter.PermissionToken
@@ -33,40 +39,49 @@ import id.sekdes.todoapps.repository.TodoLocalRepository
 import id.sekdes.todoapps.repository.locale.TodoLocalRepositoryImpl
 import id.sekdes.todoapps.repository.locale.daos.TodoDao
 import id.sekdes.todoapps.repository.locale.databases.LocaleDatabase
+import id.sekdes.todoapps.services.AlarmRemainderService.Companion.TIME_FORMAT
+import id.sekdes.todoapps.services.AlarmRemainderService.Companion.setAlarmReminder
+import id.sekdes.todoapps.views.AudioActivity
 import id.sekdes.todoapps.views.ImagePickerActivity
+import id.sekdes.todoapps.views.adapters.ImageAdapter
 import id.sekdes.todoapps.views.contracts.TodoAddContract
 import id.sekdes.todoapps.views.util.Constant
 import id.sekdes.todoapps.views.util.DateUtil
+import id.sekdes.todoapps.views.util.ReminderTime
 import java.io.File
 import java.io.IOException
-import java.time.LocalTime
+import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.collections.ArrayList
 
 
-class AddFragment : Fragment(), TodoAddContract.View {
+class AddFragment : Fragment(), TodoAddContract.View, ImageAdapter.ImageListener {
 
-    private val pickImage = 100
-    val REQUEST_IMAGE = 100
-    private var imageUri: Uri? = null
-    private var fileName = ""
-    private lateinit var pickerTime: LocalTime
 
+    private val audio by lazy { AudioActivity() }
+    private val REQUEST_IMAGE = 100
+    private val pickerTimeAlt: Calendar = Calendar.getInstance()
+    private val imageAdapter by lazy { ImageAdapter(requireContext(), this) }
     private lateinit var binding: FragmentAddBinding
     private val dao: TodoDao by lazy { LocaleDatabase.getDatabase(requireContext()).dao() }
     private val repository: TodoLocalRepository by lazy { TodoLocalRepositoryImpl(dao) }
     private val presenter: TodoAddContract.Presenter by lazy { TodoAddPresenter(this, repository) }
+    private val imageList = mutableListOf<Uri>()
+    private var reminderSet = ReminderTime.BEFORE15
+
+    ///
+    private var permissions: Array<String> = arrayOf(
+        android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
+        android.Manifest.permission.RECORD_AUDIO
+    )
+    var pathSave: String = ""
+    private lateinit var mediaRecorder: MediaRecorder
+    private lateinit var mediaPlayer: MediaPlayer
+    private var REQUEST_PERMISSION_CODE: Int = 1000
 
 
-    private var output: String? = null
-    private var mediaRecorder: MediaRecorder? = null
-    private var state: Boolean = false
-    private var recordingStopped: Boolean = false
+    private var isReminderActive = true
 
-    val REQUEST_IMAGE_CAPTURE = 0
-    val REQUEST_GALLERY_IMAGE = 1
-
-
-    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -74,13 +89,18 @@ class AddFragment : Fragment(), TodoAddContract.View {
         binding = FragmentAddBinding.inflate(inflater, container, false)
 
         setView()
-
+        val check = checkPermissionFromDevice()
+        if (!check) {
+            requestPermission()
+        }
         return binding.root
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
+    @SuppressLint("ClickableViewAccessibility")
     private fun setView() {
         binding.apply {
+
+            rvImage.adapter = imageAdapter
 
 
             btRecord.setOnClickListener {
@@ -88,12 +108,18 @@ class AddFragment : Fragment(), TodoAddContract.View {
             }
 
             btClose.setOnClickListener {
-
+                activity?.onBackPressed()
             }
 
             btTime.setOnClickListener {
                 openTimePicker()
 
+            }
+
+            mCheckBoxReminder.setOnClickListener {
+                isReminderActive = mCheckBoxReminder.isChecked
+
+                spinner.isEnabled = isReminderActive
             }
 
             ibAddImage.setOnClickListener {
@@ -122,18 +148,50 @@ class AddFragment : Fragment(), TodoAddContract.View {
                     }).check()
 
             }
+            ///
 
 
             btSave.setOnClickListener {
-                presenter.insertTodo(
-                    TodoModel(
+                if (etTitle.text.isNullOrEmpty()) {
+                    showMessage("Title tidak boleh kosong")
+                } else {
+                    val todo = TodoModel(
                         title = etTitle.text.toString(),
-                        dueTime = pickerTime
+                        dueDate = getCurrentDate(),
+                        dueTime = SimpleDateFormat(TIME_FORMAT, Locale.getDefault()).format(
+                            pickerTimeAlt.time
+                        ),
+                        images = ArrayList(imageList.asSequence().map { it.toString() }.toList()),
+                        voiceNote = pathSave,
+                        reminder = isReminderActive,
+                        reminderTime = reminderSet.time
+
                     )
-                )
+                    presenter.insertTodo(todo)
+                }
+            }
+            btRecord?.setOnTouchListener(View.OnTouchListener { v, event -> // TODO Auto-generated method stub
+                when (event.action) {
+                    MotionEvent.ACTION_DOWN -> {
+                        record()
+                        Toast.makeText(requireContext(), "onpress", Toast.LENGTH_SHORT).show()
+                        return@OnTouchListener true
+                    }
+                    MotionEvent.ACTION_UP -> {
+                        mediaRecorder.stop()
+                        Toast.makeText(requireContext(), "releas", Toast.LENGTH_SHORT).show()
+                    }
+                }
+                false
+            })
+
+            btPlay.setOnClickListener {
+                play()
             }
 
+
         }
+
 
         // Create an ArrayAdapter
         val adapter = ArrayAdapter.createFromResource(
@@ -142,8 +200,58 @@ class AddFragment : Fragment(), TodoAddContract.View {
         )
         // Specify the layout to use when the list of choices appears
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+
         // Apply the adapter to the spinner
-        binding.spinner.adapter = adapter
+        var initAdapter = true
+        binding.run {
+            spinner.adapter = adapter
+            spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                override fun onItemSelected(
+                    p0: AdapterView<*>?,
+                    p1: View?,
+                    position: Int,
+                    p3: Long
+                ) {
+                    reminderSet = when (position) {
+                        0 -> ReminderTime.BEFORE15
+                        1 -> ReminderTime.BEFORE30
+                        2 -> ReminderTime.BEFORE45
+                        else -> ReminderTime.BEFORE15
+                    }
+
+                    if (!isCanSetTime(
+                            pickerTimeAlt.get(Calendar.HOUR_OF_DAY),
+                            pickerTimeAlt.get(Calendar.MINUTE)
+                        ) && !initAdapter
+                    ) {
+                        Toast.makeText(
+                            requireContext(),
+                            "Tidak bisa mengatur reminder",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                        btTime.text = Constant.SELECT_DATE
+                    } else
+                        btTime.text = SimpleDateFormat(
+                            TIME_FORMAT,
+                            Locale.getDefault()
+                        ).format(pickerTimeAlt.time)
+                    initAdapter = false
+                }
+
+                override fun onNothingSelected(p0: AdapterView<*>?) {}
+
+            }
+        }
+    }
+
+    private fun showMessage(message: String) {
+        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+    }
+
+
+    private fun getCurrentDate(): String {
+        val date = Calendar.getInstance()
+        return SimpleDateFormat(DateUtil.dateFormat, Locale.getDefault()).format(date.time)
     }
 
     private fun showImagePickerOptions() {
@@ -160,22 +268,19 @@ class AddFragment : Fragment(), TodoAddContract.View {
             })
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     private fun openTimePicker() {
         binding.run {
             val instance = Calendar.getInstance()
             val startHour = instance.get(Calendar.HOUR_OF_DAY)
             val startMinute = instance.get(Calendar.MINUTE)
 
-            val timePickerDialog = TimePickerDialog(requireContext(), { _, hour, minute ->
-                pickerTime =
-                    LocalTime.of(
-                        hour,
-                        minute
-                    )
+            TimePickerDialog(requireContext(), { _, hour, minute ->
 
-                if (
-                    pickerTime.hour < startHour) {
+                pickerTimeAlt.set(Calendar.HOUR_OF_DAY, hour)
+                pickerTimeAlt.set(Calendar.MINUTE, minute)
+
+
+                if (!isCanSetTime(hour, minute)) {
                     Toast.makeText(
                         requireContext(),
                         "Jam Sudah Terlewat",
@@ -183,11 +288,48 @@ class AddFragment : Fragment(), TodoAddContract.View {
                     ).show()
                     btTime.text = Constant.SELECT_DATE
                 } else {
-                    btTime.text = pickerTime.format(DateUtil.timeFormat)
+                    btTime.text = SimpleDateFormat(
+                        TIME_FORMAT,
+                        Locale.getDefault()
+                    ).format(pickerTimeAlt.time)
                 }
             }, startHour, startMinute, true).show()
 
         }
+    }
+
+    private fun isCanSetTime(hour: Int, minute: Int): Boolean {
+        val instance = Calendar.getInstance()
+        val startHour = instance.get(Calendar.HOUR_OF_DAY)
+        val startMinute = instance.get(Calendar.MINUTE)
+
+        var isSetTime = false
+
+
+        if (isReminderActive) {
+            var minuteReminder = minute.minus(reminderSet.time)
+            var hourReminder = hour
+            if (minuteReminder < 0) {
+                hourReminder = hour - 1
+                minuteReminder = 60.plus(minuteReminder)
+            }
+
+
+            if (hourReminder == startHour)
+                isSetTime = minuteReminder > startMinute
+
+
+            if (hourReminder > startHour) {
+                isSetTime = true
+            }
+        } else {
+            isSetTime = !isReminderActive
+
+        }
+
+        binding.btSave.isEnabled = isSetTime
+
+        return isSetTime
     }
 
 
@@ -256,8 +398,9 @@ class AddFragment : Fragment(), TodoAddContract.View {
         if (requestCode == REQUEST_IMAGE) {
             if (resultCode == RESULT_OK) {
                 val uri = data!!.getParcelableExtra<Uri>("path")
+                imageList.add(uri!!)
                 try {
-
+                    imageAdapter.setData(imageList)
                 } catch (e: IOException) {
                     e.printStackTrace()
                 }
@@ -267,7 +410,7 @@ class AddFragment : Fragment(), TodoAddContract.View {
 
 
     private fun getCacheImagePath(fileName: String): Uri? {
-        val path: File = File(activity?.externalCacheDir, "camera")
+        val path = File(activity?.externalCacheDir, "camera")
         if (!path.exists()) path.mkdirs()
         val image = File(path, fileName)
         return FileProvider.getUriForFile(
@@ -279,10 +422,96 @@ class AddFragment : Fragment(), TodoAddContract.View {
 
 
     override fun onSuccessInsertTodo(todoModel: TodoModel) {
+
         requireActivity().runOnUiThread {
-            Toast.makeText(context, "New Task is assigned", Toast.LENGTH_LONG).show()
+            setAlarmReminder(requireContext(), todoModel)
+            Toast.makeText(context, "New Task is assigned: ${todoModel.title}", Toast.LENGTH_LONG)
+                .show()
             requireActivity().onBackPressed()
         }
     }
+
+    override fun onClick(uri: Uri) {
+
+    }
+
+    override fun onDelete(uri: Uri) {
+        imageAdapter.deleteData(uri)
+    }
+
+    fun requestPermission() {
+        ActivityCompat.requestPermissions(requireActivity(), permissions, REQUEST_PERMISSION_CODE)
+    }
+
+    ////audio
+    fun record() {
+        if (checkPermissionFromDevice()) {
+            pathSave =
+                "${requireActivity().externalCacheDir?.absolutePath}/myRecording.3gp"
+            setMediaRecorder()
+            try {
+                mediaRecorder.prepare()
+                mediaRecorder.start()
+
+            } catch (e: IOException) {
+                e.printStackTrace()
+            }
+        } else {
+            requestPermission()
+        }
+
+    }
+
+    fun play() {
+
+        mediaPlayer = MediaPlayer()
+        try {
+            mediaPlayer.setDataSource(pathSave)
+            mediaPlayer.prepare()
+        } catch (e: IOException) {
+            e.printStackTrace()
+        }
+        mediaPlayer.start()
+    }
+
+    //
+    private fun setMediaRecorder() {
+        mediaRecorder = MediaRecorder()
+        mediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC)
+        mediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP)
+        mediaRecorder.setAudioEncoder(MediaRecorder.OutputFormat.AMR_NB)
+        mediaRecorder.setOutputFile(pathSave)
+
+    }
+
+    fun checkPermissionFromDevice(): Boolean {
+        val write_external_storage_result: Int = ContextCompat.checkSelfPermission(
+            requireContext(),
+            android.Manifest.permission.WRITE_EXTERNAL_STORAGE
+        )
+        val record_audio_result: Int =
+            ContextCompat.checkSelfPermission(
+                requireContext(),
+                android.Manifest.permission.RECORD_AUDIO
+            )
+        return write_external_storage_result == PackageManager.PERMISSION_GRANTED &&
+                record_audio_result == PackageManager.PERMISSION_GRANTED
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        when (requestCode) {
+            REQUEST_PERMISSION_CODE -> if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            } else {
+            }
+        }
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+
+    }
+
+
 }
 

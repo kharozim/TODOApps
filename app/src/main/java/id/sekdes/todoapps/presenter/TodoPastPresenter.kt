@@ -1,31 +1,22 @@
 package id.sekdes.todoapps.presenter
 
-import id.sekdes.todoapps.views.contracts.TodoListContract
 import id.sekdes.todoapps.models.TodoModel
 import id.sekdes.todoapps.repository.TodoLocalRepository
+import id.sekdes.todoapps.views.contracts.TodoPastContract
 import java.util.concurrent.Executors
 
-class TodoListPresenter(
-    // get view
-    private val view: TodoListContract.View,
-    // get repository
-    private val repository: TodoLocalRepository
-): TodoListContract.Presenter {
+class TodoPastPresenter(
+private val view: TodoPastContract.View,
+private val repository: TodoLocalRepository
+): TodoPastContract.Presenter {
 
-    // must use this to get room
     private val executor by lazy { Executors.newFixedThreadPool(4) }
 
-    // get all data from room
     override fun getAllTodo( ): List<TodoModel> {
-        // declare
         val todoList = mutableListOf<TodoModel>()
-        // access room db
         executor.execute{
-            //view.loading(true)
-            // convert List<Entity> to List<Model>
             val todoListModel = repository.getAllTodo()
             todoList.addAll(todoListModel)
-           // view.loading(false)
             if (todoList.isNullOrEmpty()){
                 view.onEmptyTodo(true)
             }else{
@@ -36,10 +27,4 @@ class TodoListPresenter(
         return todoList
     }
 
-    override fun getEditTodo(todoModel: TodoModel) {
-        executor.execute {
-            val todo = repository.updateTodo(todoModel)
-            view.onSuccessUpdateTodo(todo)
-        }
-    }
 }

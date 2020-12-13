@@ -1,10 +1,12 @@
 package id.sekdes.todoapps.views.fragments
 
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.navArgs
 import id.sekdes.todoapps.views.contracts.TodoEditContract
@@ -15,10 +17,16 @@ import id.sekdes.todoapps.repository.TodoLocalRepository
 import id.sekdes.todoapps.repository.locale.TodoLocalRepositoryImpl
 import id.sekdes.todoapps.repository.locale.daos.TodoDao
 import id.sekdes.todoapps.repository.locale.databases.LocaleDatabase
+import id.sekdes.todoapps.views.adapters.ImageAdapter
+import id.sekdes.todoapps.views.adapters.ImageDetailAdapter
+
 
 class DetailFragment : Fragment(), TodoEditContract.View {
 
     private val args by navArgs<DetailFragmentArgs>()
+//    private val imageAdapter by lazy { ImageAdapter(requireContext(), this) }
+
+    private val imageAdapter by lazy { ImageDetailAdapter(requireContext()) }
     private lateinit var binding: FragmentDetailBinding
     private val dao: TodoDao by lazy { LocaleDatabase.getDatabase(requireContext()).dao() }
     private val repository: TodoLocalRepository by lazy { TodoLocalRepositoryImpl(dao) }
@@ -35,19 +43,31 @@ class DetailFragment : Fragment(), TodoEditContract.View {
     ): View? {
         binding = FragmentDetailBinding.inflate(inflater, container, false).apply {
 
-//            tieName.setText(args.todo.title)
-//            tieDescription.setText(args.todo.description)
+            rvImage.adapter = imageAdapter
+
             etTitle.setText(args.todo.title)
-            btTime.setText(args.todo.dueTime)
+            tvTime.setText(args.todo.dueTime)
+            args.todo.images?.asSequence()?.map { Uri.parse(it) }
+                ?.toMutableList()?.let { imageAdapter.setData(it) }
 
 
             btUpdate.setOnClickListener {
                 presenter.getEditTodo(
                     TodoModel(
                         args.todo.id,
-                        title = etTitle.text.toString()
+                        title = etTitle.text.toString(),
+                        images = args.todo.images,
+                        dueDate = args.todo.dueDate,
+                        dueTime = args.todo.dueTime,
+                        reminder = args.todo.reminder,
+                        isDone = args.todo.isDone,
+                        reminderTime = args.todo.reminderTime,
+                        voiceNote = args.todo.voiceNote
                     )
                 )
+            }
+            btClose.setOnClickListener {
+                activity?.onBackPressed()
             }
         }
         return binding.root
@@ -72,4 +92,6 @@ class DetailFragment : Fragment(), TodoEditContract.View {
     override fun onEmptyTodo(state: Boolean) {
         TODO("Not yet implemented")
     }
+
+
 }
