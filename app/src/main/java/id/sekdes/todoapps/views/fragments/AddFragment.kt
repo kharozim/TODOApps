@@ -25,7 +25,6 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
-import com.igreenwood.loupe.Loupe
 import com.karumi.dexter.Dexter
 import com.karumi.dexter.MultiplePermissionsReport
 import com.karumi.dexter.PermissionToken
@@ -170,17 +169,30 @@ class AddFragment : Fragment(), TodoAddContract.View, ImageAdapter.ImageListener
                     presenter.insertTodo(todo)
                 }
             }
-            btRecord?.setOnTouchListener(View.OnTouchListener { v, event -> // TODO Auto-generated method stub
+
+            btRecord.setOnTouchListener(View.OnTouchListener { v, event -> // TODO Auto-generated method stub
                 when (event.action) {
                     MotionEvent.ACTION_DOWN -> {
                         record()
-                        Toast.makeText(requireContext(), "onpress", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(requireContext(), "onRecord", Toast.LENGTH_SHORT).show()
                         return@OnTouchListener true
                     }
                     MotionEvent.ACTION_UP -> {
-                        mediaRecorder.stop()
-                        Toast.makeText(requireContext(), "releas", Toast.LENGTH_SHORT).show()
+                        try {
+                            mediaRecorder.stop()
+                            Toast.makeText(requireContext(), "releas", Toast.LENGTH_SHORT)
+                                .show()
+                        } catch (e: Exception) {
+                            Toast.makeText(
+                                requireContext(),
+                                "gagal menyimpan, tekan labih lama",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+                        // use try catch to hadle force close when on stop() before start recording
+
                     }
+
                 }
                 false
             })
@@ -446,8 +458,7 @@ class AddFragment : Fragment(), TodoAddContract.View, ImageAdapter.ImageListener
     ////audio
     fun record() {
         if (checkPermissionFromDevice()) {
-            pathSave =
-                "${requireActivity().externalCacheDir?.absolutePath}/myRecording.3gp"
+            pathSave = "${requireActivity().externalCacheDir?.absolutePath}/myRecording.3gp"
             setMediaRecorder()
             try {
                 mediaRecorder.prepare()
@@ -459,7 +470,7 @@ class AddFragment : Fragment(), TodoAddContract.View, ImageAdapter.ImageListener
         } else {
             requestPermission()
         }
-
+        return
     }
 
     fun play() {
