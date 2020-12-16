@@ -2,6 +2,7 @@ package id.sekdes.todoapps.views.fragments
 
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.app.Activity.RESULT_OK
 import android.app.TimePickerDialog
 import android.content.DialogInterface
@@ -95,6 +96,7 @@ class AddFragment : Fragment(), TodoAddContract.View, ImageAdapter.ImageListener
         return binding.root
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     private fun setView() {
         binding.apply {
 
@@ -164,23 +166,35 @@ class AddFragment : Fragment(), TodoAddContract.View, ImageAdapter.ImageListener
                         reminder = isReminderActive,
                         reminderTime = reminderSet.time
 
-
                     )
                     presenter.insertTodo(todo)
 
                 }
             }
-            btRecord?.setOnTouchListener(View.OnTouchListener { v, event ->
+
+            btRecord.setOnTouchListener(View.OnTouchListener { v, event -> // TODO Auto-generated method stub
                 when (event.action) {
                     MotionEvent.ACTION_DOWN -> {
                         record()
-                        Toast.makeText(requireContext(), "onpress", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(requireContext(), "onRecord", Toast.LENGTH_SHORT).show()
                         return@OnTouchListener true
                     }
                     MotionEvent.ACTION_UP -> {
-                        mediaRecorder.stop()
-                        Toast.makeText(requireContext(), "releas", Toast.LENGTH_SHORT).show()
+                        try {
+                            mediaRecorder.stop()
+                            Toast.makeText(requireContext(), "releas", Toast.LENGTH_SHORT)
+                                .show()
+                        } catch (e: Exception) {
+                            Toast.makeText(
+                                requireContext(),
+                                "gagal menyimpan, tekan labih lama",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+                        // use try catch to hadle force close when on stop() before start recording
+
                     }
+
                 }
                 false
             })
@@ -448,8 +462,7 @@ class AddFragment : Fragment(), TodoAddContract.View, ImageAdapter.ImageListener
     ////audio
     fun record() {
         if (checkPermissionFromDevice()) {
-            pathSave =
-                "${requireActivity().externalCacheDir?.absolutePath}/myRecording.3gp"
+            pathSave = "${requireActivity().externalCacheDir?.absolutePath}/myRecording.3gp"
             setMediaRecorder()
             try {
                 mediaRecorder.prepare()
@@ -461,7 +474,7 @@ class AddFragment : Fragment(), TodoAddContract.View, ImageAdapter.ImageListener
         } else {
             requestPermission()
         }
-
+        return
     }
 
     fun play() {

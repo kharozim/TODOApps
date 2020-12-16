@@ -4,6 +4,7 @@ import android.os.Parcelable
 import id.sekdes.todoapps.repository.locale.entities.TodoEntity
 import id.sekdes.todoapps.views.util.ArrayListConverter
 import kotlinx.android.parcel.Parcelize
+import java.time.LocalTime
 
 @Parcelize
 data class TodoModel(
