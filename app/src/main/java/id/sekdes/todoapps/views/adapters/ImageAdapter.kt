@@ -52,6 +52,7 @@ class ImageAdapter(
                         override fun onDismiss(view: ImageView) {}
                     }
                 }
+                ivImage.setOnClickListener { listener.onClick(uri) }
 
                 imageButton.setOnClickListener { listener.onDelete(uri) }
             }

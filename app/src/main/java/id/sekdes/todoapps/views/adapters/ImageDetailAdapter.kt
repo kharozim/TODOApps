@@ -12,7 +12,9 @@ import id.sekdes.todoapps.databinding.ItemListDetailImageBinding
 
 
 class ImageDetailAdapter(
-    private val context: Context
+    private val context: Context,
+    private val listener: ImageAdapter.ImageListener
+
 ) : RecyclerView.Adapter<ImageDetailAdapter.MyViewHolder>() {
 
     var imageList = mutableListOf<Uri>()
@@ -27,6 +29,9 @@ class ImageDetailAdapter(
                 Glide.with(binding.root)
                     .load(uri)
                     .into(ivImage)
+
+                ivImage.setOnClickListener { listener.onClick(uri) }
+
 
             }
         }

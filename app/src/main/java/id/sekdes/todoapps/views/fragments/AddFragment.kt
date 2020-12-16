@@ -25,6 +25,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import com.karumi.dexter.Dexter
 import com.karumi.dexter.MultiplePermissionsReport
 import com.karumi.dexter.PermissionToken
@@ -167,6 +168,7 @@ class AddFragment : Fragment(), TodoAddContract.View, ImageAdapter.ImageListener
 
                     )
                     presenter.insertTodo(todo)
+
                 }
             }
 
@@ -421,16 +423,16 @@ class AddFragment : Fragment(), TodoAddContract.View, ImageAdapter.ImageListener
     }
 
 
-    private fun getCacheImagePath(fileName: String): Uri? {
-        val path = File(activity?.externalCacheDir, "camera")
-        if (!path.exists()) path.mkdirs()
-        val image = File(path, fileName)
-        return FileProvider.getUriForFile(
-            requireContext(),
-            activity?.packageName + ".provider",
-            image
-        )
-    }
+//    private fun getCacheImagePath(fileName: String): Uri? {
+//        val path = File(activity?.externalCacheDir, "camera")
+//        if (!path.exists()) path.mkdirs()
+//        val image = File(path, fileName)
+//        return FileProvider.getUriForFile(
+//            requireContext(),
+//            activity?.packageName + ".provider",
+//            image
+//        )
+//    }
 
 
     override fun onSuccessInsertTodo(todoModel: TodoModel) {
@@ -444,6 +446,8 @@ class AddFragment : Fragment(), TodoAddContract.View, ImageAdapter.ImageListener
     }
 
     override fun onClick(uri: Uri) {
+        val action = AddFragmentDirections.actionAddFragmentToImageFragment(uri.toString())
+        findNavController().navigate(action)
 
     }
 

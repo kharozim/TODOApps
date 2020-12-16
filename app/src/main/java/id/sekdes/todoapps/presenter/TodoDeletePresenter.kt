@@ -14,8 +14,8 @@ class TodoDeletePresenter(
 
     override fun getDeleteTodo(todoModel: TodoModel) {
         executor.execute {
-            val todo = repository.deleteTodo(todoModel)
-            view.onSuccessDeleteTodo(todo)
+            val id = repository.deleteTodo(todoModel)
+            view.onSuccessDeleteTodo(id)
         }
     }
 }

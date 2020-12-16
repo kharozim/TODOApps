@@ -7,5 +7,5 @@ interface TodoLocalRepository {
     fun getAllTodo(): List<TodoModel>
     fun insertTodo(todo: TodoModel) : TodoModel
     fun updateTodo(todo: TodoModel) : TodoModel
-    fun deleteTodo(todo: TodoModel) : Long
+    fun deleteTodo(todo: TodoModel) : TodoModel
 }

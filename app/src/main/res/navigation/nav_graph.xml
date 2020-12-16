@@ -22,7 +22,12 @@
         android:id="@+id/addFragment"
         android:name="id.sekdes.todoapps.views.fragments.AddFragment"
         android:label="fragment_add"
-        tools:layout="@layout/fragment_add" />
+        tools:layout="@layout/fragment_add" >
+        <action
+            android:id="@+id/action_addFragment_to_imageFragment"
+            app:destination="@id/imageFragment"
+            app:popUpTo="@id/addFragment" />
+    </fragment>
     <fragment
         android:id="@+id/detailFragment"
         android:name="id.sekdes.todoapps.views.fragments.DetailFragment"
@@ -31,6 +36,10 @@
         <argument
             android:name="todo"
             app:argType="id.sekdes.todoapps.models.TodoModel" />
+        <action
+            android:id="@+id/action_detailFragment_to_imageFragment"
+            app:destination="@id/imageFragment"
+            app:popUpTo="@id/detailFragment" />
     </fragment>
     <fragment
         android:id="@+id/listFragment2"
@@ -42,5 +51,34 @@
             app:destination="@id/detailFragment"
             app:popUpTo="@id/homeFragment"
             app:popUpToInclusive="false" />
+    </fragment>
+    <fragment
+        android:id="@+id/missedFragment"
+        android:name="id.sekdes.todoapps.views.fragments.MissedFragment"
+        android:label="fragment_missed"
+        tools:layout="@layout/fragment_missed" >
+        <action
+            android:id="@+id/action_missedFragment_to_detailFragment"
+            app:destination="@id/detailFragment"
+            app:popUpTo="@id/missedFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/pastFragment"
+        android:name="id.sekdes.todoapps.views.fragments.PastFragment"
+        android:label="fragment_past"
+        tools:layout="@layout/fragment_past" >
+        <action
+            android:id="@+id/action_pastFragment_to_detailFragment"
+            app:destination="@id/detailFragment"
+            app:popUpTo="@id/pastFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/imageFragment"
+        android:name="id.sekdes.todoapps.views.fragments.ImageFragment"
+        android:label="fragment_image"
+        tools:layout="@layout/fragment_image" >
+        <argument
+            android:name="image"
+            app:argType="string" />
     </fragment>
 </navigation>

@@ -7,8 +7,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.navigation.fragment.findNavController
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import id.sekdes.todoapps.views.contracts.TodoListContract
 import id.sekdes.todoapps.databinding.FragmentListBinding
+import id.sekdes.todoapps.databinding.TodoMenuDialogBinding
 import id.sekdes.todoapps.models.TodoModel
 import id.sekdes.todoapps.presenter.TodoDeletePresenter
 import id.sekdes.todoapps.presenter.TodoListPresenter
@@ -58,17 +60,27 @@ class ListFragment :
         }
     }
 
-    override fun onSuccessDeleteTodo(id: Long) {
+    override fun onSuccessDeleteTodo(todo: TodoModel) {
         requireActivity().runOnUiThread {
             binding.run {
-                adapter.deleteData(id)
+                adapter.deleteData(todo)
             }
+            presenter.getAllTodo()
         }
     }
 
     override fun onSuccessGetAllTodo(list: List<TodoModel>) {
         requireActivity().runOnUiThread {
-            adapter.setData(list.toMutableList())
+
+            adapter.generateTodo(list.toMutableList())
+
+            binding.apply {
+                val x = adapter.getAllCompleted()
+                val max = adapter.getAllCompleted() + adapter.getAllOngoing()
+                progressBar.max = max
+                progressBar.progress = x
+                tvProgress.text = "$x / $max"
+            }
         }
     }
 
@@ -76,6 +88,8 @@ class ListFragment :
         requireActivity().runOnUiThread {
             adapter.updateData(todoModel)
             Toast.makeText(requireContext(), "${todoModel.id} berhasil diubah", Toast.LENGTH_SHORT).show()
+            presenter.getAllTodo()
+
         }
     }
 
@@ -106,7 +120,31 @@ class ListFragment :
         cancelAlarmReminder(requireContext(),todo.id.toInt())
     }
 
-    override fun onDelete(todo: TodoModel) {
-        presenterDel.getDeleteTodo(todo)
+    override fun onLongPress(todo: TodoModel, position: Int) {
+        val dialog = BottomSheetDialog(requireContext())
+        val x = TodoMenuDialogBinding.inflate(LayoutInflater.from(context), null, false)
+        x.run {
+            tvName.text = todo.title
+            tvDone.text = if (todo.isDone) "set as undone" else "set as done"
+            tvView.setOnClickListener {
+                dialog.hide()
+                onClick(todo)
+            }
+      
+            tvDone.setOnClickListener {
+                dialog.hide()
+                todo.isDone = !todo.isDone
+                onDone(todo)
+            }
+            tvDelete.setOnClickListener {
+                dialog.hide()
+                presenterDel.getDeleteTodo(todo)
+            }
+
+        }
+        dialog.setContentView(x.root)
+        dialog.show()
+        
+        
     }
 }

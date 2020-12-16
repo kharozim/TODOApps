@@ -21,8 +21,8 @@ class TodoLocalRepositoryImpl(private val dao: TodoDao) : TodoLocalRepository {
         return todo
     }
 
-    override fun deleteTodo(todo: TodoModel): Long {
+    override fun deleteTodo(todo: TodoModel): TodoModel {
         dao.deleteTodo(todo.toEntity())
-        return todo.id
+        return todo
     }
 }

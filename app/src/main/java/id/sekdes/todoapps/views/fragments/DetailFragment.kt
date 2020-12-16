@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import id.sekdes.todoapps.views.contracts.TodoEditContract
 import id.sekdes.todoapps.databinding.FragmentDetailBinding
@@ -21,12 +22,11 @@ import id.sekdes.todoapps.views.adapters.ImageAdapter
 import id.sekdes.todoapps.views.adapters.ImageDetailAdapter
 
 
-class DetailFragment : Fragment(), TodoEditContract.View {
+class DetailFragment : Fragment(), TodoEditContract.View, ImageAdapter.ImageListener {
 
     private val args by navArgs<DetailFragmentArgs>()
-//    private val imageAdapter by lazy { ImageAdapter(requireContext(), this) }
+    private val imageAdapter by lazy { ImageDetailAdapter(requireContext(), this) }
 
-    private val imageAdapter by lazy { ImageDetailAdapter(requireContext()) }
     private lateinit var binding: FragmentDetailBinding
     private val dao: TodoDao by lazy { LocaleDatabase.getDatabase(requireContext()).dao() }
     private val repository: TodoLocalRepository by lazy { TodoLocalRepositoryImpl(dao) }
@@ -46,10 +46,9 @@ class DetailFragment : Fragment(), TodoEditContract.View {
             rvImage.adapter = imageAdapter
 
             etTitle.setText(args.todo.title)
-            tvTime.setText(args.todo.dueTime)
+            tvTime.text = args.todo.dueTime
             args.todo.images?.asSequence()?.map { Uri.parse(it) }
                 ?.toMutableList()?.let { imageAdapter.setData(it) }
-
 
             btUpdate.setOnClickListener {
                 presenter.getEditTodo(
@@ -66,6 +65,7 @@ class DetailFragment : Fragment(), TodoEditContract.View {
                     )
                 )
             }
+
             btClose.setOnClickListener {
                 activity?.onBackPressed()
             }
@@ -92,6 +92,17 @@ class DetailFragment : Fragment(), TodoEditContract.View {
     override fun onEmptyTodo(state: Boolean) {
         TODO("Not yet implemented")
     }
+
+    override fun onClick(uri: Uri) {
+
+        val action = DetailFragmentDirections.actionDetailFragmentToImageFragment(uri.toString())
+        findNavController().navigate(action)
+    }
+
+    override fun onDelete(uri: Uri) {
+        TODO("Not yet implemented")
+    }
+
 
 
 }

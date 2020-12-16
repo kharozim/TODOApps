@@ -6,7 +6,7 @@ interface TodoDeleteContract {
 
     interface View{
         fun loading(isLoading : Boolean)
-        fun onSuccessDeleteTodo(id: Long)
+        fun onSuccessDeleteTodo(todo: TodoModel)
     }
 
     interface Presenter{

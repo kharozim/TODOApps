@@ -86,10 +86,24 @@ class TodoPastAdapter(
         this.todoList = item
         notifyDataSetChanged()
     }
+    fun updateData(todoModel: TodoModel) {
+        val model = Todo.Data(todoModel)
+        val index = todoList.indexOfFirst { it == model }
+        if (index != -1) {
+            todoList[index] = model
+            notifyItemChanged(index)
+        }
+    }
 
-    fun deleteTodo(position: Int) {
-        todoList.removeAt(position)
-        notifyItemRemoved(position)
+    fun deleteData(todo: TodoModel) {
+        val model = Todo.Data(todo)
+        val index = todoList.indexOfFirst { it == model }
+        if (index != -1) {
+            todoList.removeAt(index)
+
+            notifyItemRemoved(index)
+        }
+
     }
 
 
@@ -105,6 +119,7 @@ class TodoPastAdapter(
     interface TodoListener {
         fun onClick(todo: TodoModel)
         fun onDelete(todo: TodoModel, position: Int)
+        fun onDone(todo: TodoModel)
         fun onLongPress(todo: TodoModel, position: Int)
     }
 
@@ -117,7 +132,18 @@ class TodoPastAdapter(
             holder.itemBinding.apply {
                 ivImage.visibility = if (todo.todo.images.isNullOrEmpty()) View.GONE else View.VISIBLE
                 ivVoiceNote.visibility = if (todo.todo.voiceNote.isEmpty()) View.GONE else View.VISIBLE
+                root.setOnClickListener {
+                    listener.onClick(todo.todo)
+                }
+                root.setOnLongClickListener {
+                    listener.onLongPress(todo.todo, position)
+                    return@setOnLongClickListener true
+                }
+                cbDone.setOnClickListener {
+                    todo.todo.isDone = !todo.todo.isDone
 
+                    listener.onDone(todo.todo)
+                }
             }
         } else if (todo is Todo.Category && holder is HeaderViewHolder) {
             holder.bindData(todo.date)
@@ -134,7 +160,7 @@ class TodoPastAdapter(
         fun bindData(date: String){
             binding.run {
 
-                tvDateHeader.text = date.toUpperCase(Locale.getDefault())
+                tvDateHeader.text = date
             }
 
         }

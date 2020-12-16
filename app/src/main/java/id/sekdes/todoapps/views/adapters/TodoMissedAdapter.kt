@@ -10,6 +10,8 @@ import androidx.recyclerview.widget.RecyclerView
 import id.sekdes.todoapps.databinding.ItemListTodoBinding
 import id.sekdes.todoapps.databinding.ItemListTodoHeaderBinding
 import id.sekdes.todoapps.models.TodoModel
+import id.sekdes.todoapps.views.util.DateUtil
+import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
@@ -20,7 +22,6 @@ class TodoMissedAdapter(
     private val context: Context, private val listener: TodoListener
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private var todoList = mutableListOf<Todo>()
-
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
 
@@ -49,23 +50,22 @@ class TodoMissedAdapter(
         }
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     fun generateTodo(it: List<TodoModel>){
         val list = mutableListOf<Todo>()
         val sortedList = it.sortedByDescending { it.dueDate }
         var temp = ""
-        val dateNow = LocalDate.now()
+        val dateNow = Calendar.getInstance().time
+
+        val mFormatDate = SimpleDateFormat(DateUtil.dateFormat, Locale.getDefault())
+
 
         sortedList.forEach { model ->
             val date = model.dueDate
-            if (date.isNotEmpty() && LocalDate.parse(date, DateTimeFormatter.ofPattern("dd-MM-yyyy")).isBefore(dateNow) && !model.isDone){
+            if (date.isNotEmpty() &&  mFormatDate.parse(date)?.before(mFormatDate.parse(mFormatDate.format(dateNow))) == true && !model.isDone){
                 if (temp != date) {
                     temp = date
 
-                    list.add(Todo.Category(
-                        LocalDate.parse(date, DateTimeFormatter.ofPattern("dd-MM-yyyy")).format(
-                            DateTimeFormatter.ofLocalizedDate(
-                            FormatStyle.MEDIUM))
+                    list.add(Todo.Category( SimpleDateFormat("dd-MMM-yyyy", Locale.getDefault()).format(mFormatDate.parse(date)?:dateNow)
                     ))
                 }
                 list.add(Todo.Data(model))
@@ -79,9 +79,15 @@ class TodoMissedAdapter(
         notifyDataSetChanged()
     }
 
-    fun deleteTodo(position: Int) {
-        todoList.removeAt(position)
-        notifyItemRemoved(position)
+    fun deleteData(todo: TodoModel) {
+        val model = Todo.Data(todo)
+        val index = todoList.indexOfFirst { it == model }
+        if (index != -1) {
+            todoList.removeAt(index)
+
+            notifyItemRemoved(index)
+        }
+
     }
 
 
@@ -96,8 +102,17 @@ class TodoMissedAdapter(
 
     interface TodoListener {
         fun onClick(todo: TodoModel)
-        fun onDelete(todo: TodoModel, position: Int)
+        fun onDone(todo: TodoModel)
         fun onLongPress(todo: TodoModel, position: Int)
+    }
+
+    fun updateData(todoModel: TodoModel) {
+        val model = Todo.Data(todoModel)
+        val index = todoList.indexOfFirst { it == model }
+        if (index != -1) {
+            todoList[index] = model
+            notifyItemChanged(index)
+        }
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
@@ -109,7 +124,18 @@ class TodoMissedAdapter(
             holder.itemBinding.apply {
                 ivImage.visibility = if (todo.todo.images.isNullOrEmpty()) View.GONE else View.VISIBLE
                 ivVoiceNote.visibility = if (todo.todo.voiceNote.isEmpty()) View.GONE else View.VISIBLE
+                root.setOnClickListener {
+                    listener.onClick(todo.todo)
+                }
+                root.setOnLongClickListener {
+                    listener.onLongPress(todo.todo, position)
+                    return@setOnLongClickListener true
+                }
+                cbDone.setOnClickListener {
+                    todo.todo.isDone = !todo.todo.isDone
 
+                    listener.onDone(todo.todo)
+                }
             }
         } else if (todo is Todo.Category && holder is HeaderViewHolder) {
             holder.bindData(todo.date)
@@ -125,11 +151,13 @@ class TodoMissedAdapter(
     ): RecyclerView.ViewHolder(binding.root){
         fun bindData(date: String){
             binding.run {
-                tvDateHeader.text = date.toUpperCase(Locale.getDefault())
+                tvDateHeader.text = date
             }
 
         }
     }
+
+
 
     class MyViewHolder(
         val itemBinding: ItemListTodoBinding,
@@ -143,5 +171,8 @@ class TodoMissedAdapter(
 
         }
     }
+
+
+
 
 }
